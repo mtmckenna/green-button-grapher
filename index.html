@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!-- Template: http://twitter.github.com/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>How Much Can I Save?</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="css/bootstrap2.css" rel="stylesheet">
+        <link href="css/jquery.fileupload-ui.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <style>
+            body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            }
+        </style>
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">How Much Can I Save?</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <h3>Open your GreenButton data:</h3>
+
+            <div id="file-upload" class="clearfix">
+                <input type="file" id="files" name="files[]">
+            </div>
+            <br />
+            <div id="address"></div>
+
+            <div id="time-range-wrapper" class="btn-group-wrap">
+                <div id="time-range" class="btn-group">
+                    <button class="btn" id="last-7-days">Last 7 Days</button>
+                    <button class="btn" id="last-30-days">Last 30 Days</button>
+                    <button class="btn" id="all-time">All time</button>
+                </div>
+            </div>
+
+            <div id="graph" style="width: 100%; height: 300px;"></div>
+            <div class="tabbable tabs-left">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#heating" data-toggle="tab">Heating</a></li>
+                    <li><a href="#cooling" data-toggle="tab">Cooling</a></li>
+                    <li><a href="#water-heater" data-toggle="tab">Water Heater</a></li>
+                    <li><a href="#dehumidifier" data-toggle="tab">Dehumidifier</a></li>
+                    <li><a href="#refrigerator" data-toggle="tab">Refrigerator/Freezer</a></li>
+                    <li><a href="#computers" data-toggle="tab">Computers</a></li>
+                    <li><a href="#televisions" data-toggle="tab">Televisions</a></li>
+                </ul>
+                <div id="appliance-details" class="tab-content">
+                    <div class="tab-pane active" id="heating">
+                        <ul>
+                            <li>Baseboard</li>
+                            <li>Portable</li>
+                            <li>Heat pump</li>
+                            <li>Electric furnace</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="cooling">
+                        <p>Howdy, I'm in Section 2.</p>
+                    </div>
+                    <div class="tab-pane" id="water-heater">
+                        WATER HEATER!!!!!!
+                    </div>
+                     <div class="tab-pane" id="dehumidifier">
+                         Dehumidifidifier
+                    </div>
+                      <div class="tab-pane" id="refrigerator">
+                          Refrigeratorsdkfjdsalkf
+                    </div>
+                     <div class="tab-pane" id="computers">
+                       Computersfsdfsdfdsfkkk
+                    </div>
+                     <div class="tab-pane" id="televisions">
+                        Televissiosnsnss
+                    </div>
+               </div>
+            </div>
+            <div id="appliances">
+                <div class="appliance">
+                    Aquarium = 50–1210 Watts
+                </div>
+                <div class="appliance">
+                    Clock radio = 10
+                </div>
+                <div class="appliance">
+                    Coffee maker = 900–1200
+                </div>
+                <div class="appliance">
+                    Clothes washer = 350–500
+                </div>
+                <div class="appliance">
+                    Clothes dryer = 1800–5000
+                </div>
+                <div class="appliance">
+                    Dishwasher = 1200–2400 (using the drying feature greatly increases energy consumption)
+                </div>
+                <div class="appliance">
+                    Dehumidifier = 785
+                </div>
+                <div class="appliance">
+                    Electric blanket- Single/Double = 60 / 100
+                </div>
+                <div class="appliance">
+                    Fans
+                </div>
+                <div class="appliance">
+                    Ceiling = 65–175
+                </div>
+                <div class="appliance">
+                    Window = 55–250
+                </div>
+                <div class="appliance">
+                    Furnace = 750
+                </div>
+                <div class="appliance">
+                    Whole house = 240–750
+                </div>
+                <div class="appliance">
+                    Hair dryer = 1200–1875
+                </div>
+                <div class="appliance">
+                    Heater (portable) = 750–1500
+                </div>
+                <div class="appliance">
+                    Clothes iron = 1000–1800
+                </div>
+                <div class="appliance">
+                    Microwave oven = 750–1100
+                </div>
+                <div class="appliance">
+                    Personal computer
+                </div>
+                <div class="appliance">
+                    CPU - awake / asleep = 120 / 30 or less
+                </div>
+                <div class="appliance">
+                    Monitor - awake / asleep = 150 / 30 or less
+                </div>
+                <div class="appliance">
+                    Laptop = 50
+                </div>
+                <div class="appliance">
+                    Radio (stereo) = 70–400
+                </div>
+                <div class="appliance">
+                    Refrigerator (frost-free, 16 cubic feet) = 725
+                </div>
+                <div class="appliance">
+                    Televisions (color)
+                    19" = 65–110
+                    27" = 113
+                    36" = 133
+                    53"-61" Projection = 170
+                    Flat screen = 120
+                </div>
+                <div class="appliance">
+                    Toaster = 800–1400
+                </div>
+                <div class="appliance">
+                    Toaster oven = 1225
+                </div>
+                <div class="appliance">
+                    VCR/DVD = 17–21 / 20–25
+                </div>
+                <div class="appliance">
+                    Vacuum cleaner = 1000–1440
+                </div>
+                <div class="appliance">
+                    Water heater (40 gallon) = 4500–5500
+                </div>
+                <div class="appliance">
+                    Water pump (deep well) = 250–1100
+                </div>
+                <div class="appliance">
+                    Water bed (with heater, no cover) = 120–380
+                </div>
+            </div>
+
+        </div> <!-- /container -->
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="js/jquery.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/jquery.flot.js"></script>
+        <script src="js/jquery.flot.resize.js"></script>
+        <script src="js/jquery.pretty-file.js"></script>
+        <script src="js/jquery.xml2json.js"></script>
+        <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+        <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap-tab.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/livereload.js?host=localhost"></script>
+
+    </body>
+</html>
