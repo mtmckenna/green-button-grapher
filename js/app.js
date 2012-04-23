@@ -204,7 +204,7 @@ app.getDateIndex = function(dateToFind) {
 
 app.getYMinYMax = function() {
     app.yMin = 0;
-    app.yMax = 1;
+    app.yMax = 10;
 
     // TODO: this method can be more efficient
     for (var i = 0; i < app.currentReadings.length; i++) {
@@ -274,11 +274,13 @@ app.plotAvgDay = function() {
     }
 
     app.avgDayReadings = app.getAvgArray(readingsByHour);
+    app.avgDayReadings.sort(function(a, b) { return a[0] - b[0]; });
     app.setCurrentReadings(app.avgDayReadings);
 
     app.xMin = app.avgDayReadings[0][0];
     app.xMax = app.avgDayReadings[app.avgDayReadings.length -1][0];
 
+    console.log('min max: ' + app.xMin + ' ' + app.xMax);
     app.plot();
 };
 
