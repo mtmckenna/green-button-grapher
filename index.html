@@ -3,15 +3,17 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>How Much Can I Save?</title>
+        <title>Power Owl - How Much Money Can You Save on Your Electricity Bill?</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
 
         <!-- Le styles -->
-        <link href="css/bootstrap2.css" rel="stylesheet">
-        <link href="css/jquery.fileupload-ui.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
+        <link href="css/bootstrap2.css" rel="stylesheet" />
+        <link href="css/rickshaw.min.css" rel="stylesheet" />
+        <link href="css/jquery-ui-smoothness.css" rel="stylesheet" />
+        <link href="css/jquery.fileupload-ui.css" rel="stylesheet" />
+        <link href="css/style.css" rel="stylesheet" />
         <style>
             body {
                 padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -34,14 +36,14 @@
     <body>
 
         <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
+            <div class="navbar-inner alpha-bg">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">How Much Can I Save?</a>
+                    <a class="brand" href="#">Power Owl - Save on Your Electricity Bill</a>
                     <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active"><a href="#">Home</a></li>
@@ -62,15 +64,29 @@
             <br />
             <div id="address"></div>
 
-            <div id="time-range-wrapper" class="btn-group-wrap">
-                <div id="time-range" class="btn-group">
-                    <button class="btn" id="last-7-days">Last 7 Days</button>
-                    <button class="btn" id="last-30-days">Last 30 Days</button>
-                    <button class="btn" id="all-time">All time</button>
+            <div id="time-range-btn-wrapper" class="btn-group-wrap">
+                <div id="time-range-btn-group" class="btn-group graph-sel-group" data-toggle="buttons-radio">
+                    <button class="btn" data-days="1" id="most-recent-day">Most Recent Day</button>
+                    <button class="btn" data-days="7" id="last-7-days">Last 7 Days</button>
+                    <button class="btn" data-days="30" id="last-30-days">Last 30 Days</button>
+                    <button class="btn" data-days="0" id="all-time">All Time</button>
+                    <button class="btn" id="averages">Averages</button>
                 </div>
             </div>
 
-            <div id="graph" style="width: 100%; height: 300px;"></div>
+            <div id="avg-btn-wrapper" class="btn-group-wrap">
+                <div id="avg-btn-group" class="btn-group graph-sel-group" data-toggle="buttons-radio">
+                    <button class="btn" id="avg-day">Day</button>
+                    <button class="btn" id="avg-weekend-day">Weekend Day</button>
+                    <button class="btn" id="avg-week-day">Week Day</button>
+                    <button class="btn" id="avg-peak-time">Peak Time</button>
+                </div>
+            </div>
+
+            <div id="graph-wrapper">
+                <div id="graph"></div>
+                <div id="loading-box"><h1>Loading...</h1></div>
+            </div>
             <div class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#heating" data-toggle="tab">Heating</a></li>
@@ -83,6 +99,12 @@
                 </ul>
                 <div id="appliance-details" class="tab-content">
                     <div class="tab-pane active" id="heating">
+
+                        <div class="section-desc clearfix">hi</div>
+                        <div class="clearfix">
+                            <div id="heating-eff-slider" class="slider actual"></div>
+                            <div id="heating-time-slider" class="slider actual"></div>
+                        </div>
                         <ul>
                             <li>Baseboard</li>
                             <li>Portable</li>
@@ -216,17 +238,23 @@
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
+        <script src="js/spin.js"></script>
         <script src="js/jquery.js"></script>
         <script src="js/jquery-ui.js"></script>
         <script src="js/jquery.flot.js"></script>
+        <script src="js/jquery.spin.js"></script>
         <script src="js/jquery.flot.resize.js"></script>
         <script src="js/jquery.pretty-file.js"></script>
         <script src="js/jquery.xml2json.js"></script>
+        <!--[if IE]>
+        <script type="text/javascript" src="js/flashcanvas/flashcanvas.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="js/flotr2.min.js"></script>
         <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
         <script src="js/bootstrap.js"></script>
         <script src="js/bootstrap-tab.js"></script>
+        <script src="js/bootstrap-dropdown.js"></script>
         <script src="js/app.js"></script>
         <script src="js/livereload.js?host=localhost"></script>
-
     </body>
 </html>
