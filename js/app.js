@@ -77,10 +77,13 @@ app.handleAvgButtons = function(e) {
             app.plotAvgDay();
             break;
         case 'avg-weekend-day':
+            app.plotAvgWeekendDay();
             break;
         case 'avg-week-day':
+            app.plotAvgWeekDay();
             break;
         case 'avg-peak-time':
+            app.plotAvgPeakTime();
             break;
         default:
             console.log('warning: unknown avg button clicked');
@@ -260,12 +263,12 @@ app.plotPreviousDays = function(numDays) {
     app.plot();
 };
 
+// TODO: plotAvgDay, WeekendDay, WeekDay have common functionality
+// to be factored out.
 app.plotAvgDay = function() {
     var readingsByHour = {};
     for (var i = 0; i < app.readings.length; i++) {
         var hour = new Date(app.readings[i][0]).getHours();
-        //var date = new Date(0, 0, 0, 0, 0, 0, 0);
-        //date.setHours(hour);
 
         // If this day is already in array, push value on top
         var updatedHour = readingsByHour[hour] || [];
@@ -277,21 +280,84 @@ app.plotAvgDay = function() {
     app.avgDayReadings.sort(function(a, b) { return a[0] - b[0]; });
     app.setCurrentReadings(app.avgDayReadings);
 
-    app.xMin = app.avgDayReadings[0][0];
-    app.xMax = app.avgDayReadings[app.avgDayReadings.length -1][0];
+    app.xMin = app.currentReadings[0][0];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
 
-    console.log('min max: ' + app.xMin + ' ' + app.xMax);
     app.plot();
 };
 
 app.plotAvgWeekendDay = function() {
+    var readingsByHour = {};
+    for (var i = 0; i < app.readings.length; i++) {
+        var day = new Date(app.readings[i][0]).getDay();
+        if (day !== 0 && day !== 6) { continue; }
 
+        var hour = new Date(app.readings[i][0]).getHours();
+
+        // If this day is already in array, push value on top
+        var updatedHour = readingsByHour[hour] || [];
+        updatedHour.push(app.readings[i][1]);
+        readingsByHour[hour] = updatedHour;
+    }
+
+    app.avgWeekendDayReadings = app.getAvgArray(readingsByHour);
+    app.avgWeekendDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.setCurrentReadings(app.avgWeekendDayReadings);
+
+    app.xMin = app.currentReadings[0][0];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+
+    app.plot();
 };
 
 app.plotAvgWeekDay = function() {
+    var readingsByHour = {};
+    for (var i = 0; i < app.readings.length; i++) {
+        var day = new Date(app.readings[i][0]).getDay();
+        if (day === 0 && day === 6) { continue; }
+
+        var hour = new Date(app.readings[i][0]).getHours();
+
+        // If this day is already in array, push value on top
+        var updatedHour = readingsByHour[hour] || [];
+        updatedHour.push(app.readings[i][1]);
+        readingsByHour[hour] = updatedHour;
+    }
+
+    app.avgWeekDayReadings = app.getAvgArray(readingsByHour);
+    app.avgWeekDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.setCurrentReadings(app.avgWeekDayReadings);
+
+    app.xMin = app.currentReadings[0][0];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+
+    app.plot();
 };
 
 app.plotAvgPeakTime = function() {
+    var readingsByHour = {};
+    for (var i = 0; i < app.readings.length; i++) {
+        var day = new Date(app.readings[i][0]).getDay();
+        var hour = new Date(app.readings[i][0]).getHours();
+        if (day === 0 && day === 6) { continue; }
+        if (hour < 12 || hour > 18) { continue; }
+
+        var hour = new Date(app.readings[i][0]).getHours();
+
+        // If this day is already in array, push value on top
+        var updatedHour = readingsByHour[hour] || [];
+        updatedHour.push(app.readings[i][1]);
+        readingsByHour[hour] = updatedHour;
+    }
+
+    app.avgWeekendDayReadings = app.getAvgArray(readingsByHour);
+    app.avgWeekendDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.setCurrentReadings(app.avgWeekendDayReadings);
+
+    app.xMin = app.currentReadings[0][0];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+
+    app.plot();
 };
 
 app.plot = function() {
