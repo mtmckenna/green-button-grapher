@@ -44,14 +44,22 @@ app.avgDayReaings = [];
 app.avgWeekendDayReadings = [];
 app.avgWeekDayReadings = [];
 app.avgPeakTimeReadings = [];
+app.modeXAxis = 'time';
 app.xMin = null;
 app.xMax = null;
 app.yMin = null;
 app.yMax = null;
+app.shadedRanges = [];
 app.xml = null;
 app.DAY_IN_MS = 86400000;
 app.MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May',
 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+app.hours = [];
+app.ticks = null;
+
+for (var i = 0; i <= 23; i++) {
+   app.hours.push(i);
+}
 
 app.handleTimeRangeButtons = function(e) {
     var target = e.target;
@@ -64,6 +72,8 @@ app.handleTimeRangeButtons = function(e) {
     // Show/hide averages button group
     if (target.id  === 'averages') {
         $('#avg-btn-group').css('display', 'inline-block');
+        //$('#avg-day').click();
+        $('#avg-btn-group').click();
     } else {
         $('#avg-btn-group').css('display', 'none');
     }
@@ -86,6 +96,8 @@ app.handleAvgButtons = function(e) {
             app.plotAvgPeakTime();
             break;
         default:
+            //var activeButton = $('#avg-btn-group').find()
+            $('#avg-day').click();
             console.log('warning: unknown avg button clicked');
             break;
     }
@@ -124,7 +136,8 @@ app.testXml = function() {
         success: function(result) {
             //console.log(result);
             app.parseGreenButtonXml(result);
-            $('#most-recent-day').trigger('click');
+            //$('#most-recent-day').trigger('click');
+            $('#avg-btn-group').click();
             $('#loading-box').hide();
         }
     });
@@ -170,6 +183,10 @@ app.parseGreenButtonXml = function(xml) {
 
     app.setCurrentReadings(app.readings);
     app.plot();
+};
+
+app.getShadedRanges = function() {
+    return [[2,5], [7, 16]];
 };
 
 // Returns index of app.intervals of the first instance of the passed date
@@ -250,6 +267,8 @@ app.getAvgArray = function(dateDict) {
 app.plotPreviousDays = function(numDays) {
     // TODO: Check if data has been loaded
     app.xMax = app.readings[app.readings.length - 1][0];
+    app.modeXAxis = 'time';
+    app.ticks = null;
 
     // Date numDays from the most recent date
     if (numDays === 0) {
@@ -259,13 +278,15 @@ app.plotPreviousDays = function(numDays) {
         app.xMin = app.readings[app.getDateIndex(dateToFind)][0];
     }
 
-    app.setCurrentReadings(app.readings);
+app.setCurrentReadings(app.readings);
     app.plot();
 };
 
 // TODO: plotAvgDay, WeekendDay, WeekDay have common functionality
 // to be factored out.
 app.plotAvgDay = function() {
+    app.modeXAxis = 'normal';
+    app.ticks = app.hours;
     var readingsByHour = {};
     for (var i = 0; i < app.readings.length; i++) {
         var hour = new Date(app.readings[i][0]).getHours();
@@ -282,6 +303,7 @@ app.plotAvgDay = function() {
 
     app.xMin = app.currentReadings[0][0];
     app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+    app.shadedRanges = app.getShadedRanges();
 
     app.plot();
 };
@@ -374,13 +396,15 @@ app.plot = function() {
     // Draw Graph
     var graph = Flotr.draw($('#graph')[0], series, {
         xaxis: {
+            ticks: app.ticks,
             min: app.xMin,
             max: app.xMax,
-            mode: 'time',
+            mode: app.modeXAxis,
             labelsAngle: 45,
             title: 'Date',
             noTicks: 10,
-            tickFormatter: function(o) { return app.timeTickFormatter(o); }
+            tickFormatter: function(o) { return app.timeTickFormatter(o); },
+            shadeRange: app.shadedRanges
         },
         yaxis: {
             min: app.yMin * 0.95,
