@@ -186,7 +186,7 @@ app.parseGreenButtonXml = function(xml) {
 };
 
 app.getShadedRanges = function() {
-    return [[2,5], [7, 16]];
+    return [[2,5], [8, 16]];
 };
 
 // Returns index of app.intervals of the first instance of the passed date
