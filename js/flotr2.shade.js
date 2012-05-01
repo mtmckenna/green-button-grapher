@@ -36,7 +36,7 @@
             ctx.strokeStyle = grid.tickColor;
 
             ctx.fillStyle = 'black';
-            ctx.fillRect(55,55,100,100);
+            //ctx.fillRect(55,55,100,100);
             console.log(options.xaxis.shadeRange[1]);
             var shadeRange = options.xaxis.shadeRange;
             myG = this;
@@ -44,13 +44,14 @@
 
             a = this.axes.x;
 
-            console.log('shaderange before ' + shadeRange[0]);
-            for (var i = 0; i < shadeRange.length; i++) {
-                var pShadeRange = [a.d2p(shadeRange[i][0]), a.d2p(shadeRange[i][1])];
+            for (i = 0; i < shadeRange.length; i++) {
+                var pShadeRange = [a.d2p(shadeRange[i][0]),
+                    a.d2p(shadeRange[i][1])];
+                console.log('shaderange: ' + shadeRange[i]);
                 console.log('pshaderange: ' + pShadeRange);
-                //ctx.fillRect(pShadeRange[0], 0, pShadeRange[1], 100);
-                ctx.fillStyle = 'pink';
-                ctx.fillRect(pShadeRange[0], 0, pShadeRange[1], 100);
+                ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
+                ctx.fillRect(pShadeRange[0], 0,
+                    pShadeRange[1] - pShadeRange[0], plotHeight);
             }
 
             ctx.restore();

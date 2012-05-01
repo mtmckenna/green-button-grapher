@@ -136,7 +136,7 @@ app.testXml = function() {
         success: function(result) {
             //console.log(result);
             app.parseGreenButtonXml(result);
-            //$('#most-recent-day').trigger('click');
+
             $('#avg-btn-group').click();
             $('#loading-box').hide();
         }
@@ -186,7 +186,69 @@ app.parseGreenButtonXml = function(xml) {
 };
 
 app.getShadedRanges = function() {
-    return [[2,5], [8, 16]];
+    var ranges = [];
+    var start = null;
+
+    if (Number(app.xMax) === Number(23)) {
+        return [[12, 19]];
+    }
+
+    console.log(app.xMin + ' <- xMin');
+    var HOUR = 1000 * 60 * 60;
+    var minDate = new Date(app.xMin);
+    minDate.setHours(1, 0, 0, 0);
+    var minTime = minDate.getTime();
+
+    var maxDate = new Date(app.xMax);
+    maxDate.setHours(23, 0, 0, 0);
+    var maxTime = maxDate.getTime();
+
+
+console.log ('max: ' + maxTime + 'min: ' + minTime);
+    // Trying to get all time ranges between 12-19.
+    // TODO: Find a better way to do this...
+    /*if (minHour >= 12 || minHour < 19) {
+        var firstRange = [];
+        firstRange[0] =
+            app.currentReadings[app.getDateIndex(new Date(app.xMin))][0];
+        firstRange[1] = 19 * HOUR + Number(firstRange[0]);
+        console.log('first hour: ' + firstRange);
+        ranges.push(firstRange);
+    }*/
+
+    for (var i = minTime; i < maxTime; i += app.DAY_IN_MS) {
+        console.log('date: ' + new Date(i));
+        console.log('0: ' + new Date(i + 12 * HOUR) + ' 1: ' +
+        new Date(i + 19 * HOUR));
+        console.log('i: ' + i);
+       ranges.push([i + 12 * HOUR, i + 19 * HOUR]);
+    }
+
+    console.log(ranges);
+    return ranges;
+
+    /*for (var i = 0; i < app.readings.length; i++) {
+        var day = new Date(app.readings[i][0]).getDay();
+        var hour = new Date(app.readings[i][0]).getHours();
+
+        // If a weekday between 12PM-6PM
+        if ((day >= 1 && day <= 5) && (hour >= 12 && hour <= 18)) {
+            if (start === null) {
+                start = app.readings[i][0];
+                console.log('start: ' + hour);
+                //start = hour;
+            }
+        } else {
+            if (start !== null) {
+               ranges.push([start, app.readings[i][0]]);
+                console.log('end: ' + hour);
+               //ranges.push([start, hour]);
+               start = null;
+            }
+        }
+    }*/
+
+    return ranges;
 };
 
 // Returns index of app.intervals of the first instance of the passed date
@@ -278,7 +340,9 @@ app.plotPreviousDays = function(numDays) {
         app.xMin = app.readings[app.getDateIndex(dateToFind)][0];
     }
 
-app.setCurrentReadings(app.readings);
+    app.readings.sort(function(a, b) { return a[0] - b[0]; });
+    app.setCurrentReadings(app.readings);
+    app.shadedRanges = app.getShadedRanges();
     app.plot();
 };
 
