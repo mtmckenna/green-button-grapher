@@ -26,15 +26,15 @@
 
             ctx.save();
 
-            var shadeRange = options.xaxis.shadeRange;
-            myG = this;
+            var shadeRanges = options.xaxis.shade.ranges;
 
             a = this.axes.x;
 
-            for (i = 0; i < shadeRange.length; i++) {
-                var pShadeRange = [a.d2p(shadeRange[i][0]),
-                a.d2p(shadeRange[i][1])];
-                ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
+            for (i = 0; i < shadeRanges.length; i++) {
+                var pShadeRange = [a.d2p(shadeRanges[i][0]),
+                a.d2p(shadeRanges[i][1])];
+                ctx.fillStyle = options.xaxis.shade.fillColor;
+                ctx.globalAlpha = options.xaxis.shade.fillOpacity;
                 ctx.fillRect(pShadeRange[0], 0,
                 pShadeRange[1] - pShadeRange[0], plotHeight);
             }

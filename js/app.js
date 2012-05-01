@@ -468,7 +468,10 @@ app.plot = function() {
             title: 'Date',
             noTicks: 10,
             tickFormatter: function(o) { return app.timeTickFormatter(o); },
-            shadeRange: app.shadedRanges
+            shade: {'ranges': app.shadedRanges,
+                'fillColor': 'red',
+                'fillOpacity': '.5'
+            }
         },
         yaxis: {
             min: app.yMin * 0.95,
