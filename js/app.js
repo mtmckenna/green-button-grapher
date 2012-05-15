@@ -9,6 +9,8 @@ app.avgWeekDayReadings = [];
 app.avgPeakTimeReadings = [];
 app.totalValue = 0;
 app.totalPeakValue = 0;
+app.totalTheoValue = 0;
+app.totalTheoPeakValue = 0;
 app.readingType = 'cost';
 app.readingTypeMap = {
     'cost': {
@@ -75,19 +77,12 @@ app.handleAvgButtons = function(e) {
     }
 };
 
-app.half = function() {
-    for (var j = 0; j < app.theoReadings.length; j++) {
-        app.theoReadings[j]['value'] = app.theoReadings[j]['value']/2;
-    }
-    app.plot();
-};
-
 app.updateTheoValues = function(percent) {
     app.theoReadings = [];
     for (var i = 0; i < app.currentReadings.length; i++) {
         app.theoReadings[i] = {};
         app.theoReadings[i]['start'] = app.currentReadings[i]['start'];
-        app.theoReadings[i][app.readingType] = app.currentReadings[i][app.readingType] * (.5 + percent);
+        app.theoReadings[i][app.readingType] = app.currentReadings[i][app.readingType] * (0.5 + percent);
     }
     app.plot();
 };
@@ -151,11 +146,13 @@ app.parseGreenButtonXml = function(xml) {
 
     app.readings = [];
     app.theoReadings = [];
+    var totalCost = 0;
     for (var i = 0; i < intervals.length; i++) {
         var start = $($(intervals[i]).find('start')).text() * 1000;
         var duration = $($(intervals[i]).find('duration')).text();
         var cost = Number($($(intervals[i]).find('cost')).text()) / 100000;
         var value = $($(intervals[i]).find('value')).text();
+        totalCost += cost;
 
         //var date = new Date(start);
         app.readings.push({'start': start,
@@ -172,7 +169,7 @@ app.parseGreenButtonXml = function(xml) {
 
     app.setCurrentReadings(app.readings);
 
-    if (app.currentReadings[0]['cost'] === 0) {
+    if (totalCost === 0) {
         app.readingType = 'value';
     } else {
         app.readingType = 'cost';
@@ -273,21 +270,26 @@ app.getYMinYMax = function() {
 app.getTotals = function() {
     app.totalValue = 0;
     app.totalPeakValue = 0;
+    app.totalTheoValue = 0;
+    app.totalTheoPeakValue = 0;
     var i, j;
 
     // TODO: this code is not efficient.
     for (i = 0; i < app.currentReadings.length; i++) {
         var start = app.currentReadings[i]['start'];
         var value = app.currentReadings[i][app.readingType];
+        var theoValue = app.theoReadings[i][app.readingType];
         if (start < app.xMin) continue;
         if (start > app.xMax) break;
         app.totalValue += value;
+        app.totalTheoValue += theoValue;
 
         for (j = 0; j < app.shadedRanges.length; j++) {
             var begin = app.shadedRanges[j][0];
             var end = app.shadedRanges[j][1];
             if (start >= begin && start < end) {
                 app.totalPeakValue += value;
+                app.totalTheoPeakValue += theoValue;
             }
         }
     }
@@ -438,7 +440,6 @@ app.plotAvgPeakTime = function() {
 };
 
 app.plot = function() {
-    console.log('plotting...');
     app.getShadedRanges();
     app.getTotals();
 
@@ -456,16 +457,23 @@ app.plot = function() {
 
     // If theoretical readings are different from actual, draw theo readings too
     if (!$(app.currentReadings).compare(app.theoReadings)) {
-    console.log('hi');
         series.push({data: theoReadings, lines: {fill: true}});
+        $('#amount-saved').show();
+    } else {
+        $('#amount-saved').hide();
     }
-
-    console.log(series);
 
     app.getYMinYMax();
 
-    $('#total').text('Total Cost:' + Math.round(app.totalValue * 100)/100);
-    $('#total-peak').text('Cost During Peak Time: ' + Math.round(app.totalPeakValue * 100)/100);
+    if (app.readingType === 'cost') {
+        $('#total').html('<strong>Total cost:</strong> $' + Math.round(app.totalValue * 100)/100);
+        $('#total-peak').html('<strong>Cost during peak time:</strong> $' + Math.round(app.totalPeakValue * 100)/100);
+        $('#total-saved').html('<strong>Total cost saved:</strong> $' + Math.round((app.totalValue - app.totalTheoValue) * 100)/100);
+        $('#total-peak-saved').html('<strong>Total cost saved during peak time:</strong> $' + Math.round((app.totalPeakValue - app.totalTheoPeakValue) * 100)/100);
+    } else {
+        $('#total').html('<strong>Total power usage:</strong> $' + Math.round(app.totalValue * 100)/100);
+        $('#total-peak').html('<strong>Total usage during peak time:</strong> $' + Math.round(app.totalPeakValue * 100)/100);
+    }
 
     // Draw Graph
     var graph = Flotr.draw($('#graph')[0], series, {
@@ -503,11 +511,6 @@ app.plot = function() {
         lines: {
             fill: false,
             fillOpacity: 1
-        },
-        mouse: {
-            track: true,
-            sensibility: 3,
-            trackY: false
         },
         HtmlText: false,
         title: app.readingTypeMap[app.readingType]['title']
@@ -580,9 +583,12 @@ $(document).ready(function() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
         // Great success! All the File APIs are supported.
         console.log('File APIs supported...');
+        $('#file-api-alert').hide();
+        $('#open-file').show();
     } else {
         console.log('File APIs NOT supported...');
-        alert("The File APIs are not fully supported in this browser.");
+        $('#file-api-alert').show();
+        $('#open-file').hide();
     }
 
     // Open file listener

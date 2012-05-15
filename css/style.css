@@ -72,6 +72,14 @@
     outline:none;
 }
 
+.alert {
+    display: none;
+    margin-top: 15px;
+}
+#open-file {
+    margin-top: 15px;
+}
+
 .file-input .btn{
     float:left;
 }
@@ -92,11 +100,6 @@
     float: left;
 }
 
-.navbar-inner {
-    /*background: #e4efc0;*/
-	/*background: url(../img/tyto-bg-top.jpg) no-repeat right center fixed;*/
-}
-
 .navbar-inner a:link {color: #000000; }
 .navbar-inner a:active {color: #000000; }
 .navbar-inner a:visited {color: #000000; }
@@ -113,8 +116,25 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
 }
 
+#about {
+    margin-top: 25px;
+}
+
+#legend {
+}
+
+#legend-peak {
+    width: 50px;
+    height: 25px;
+    margin-right: 5px;
+    background-color: #e88ba1;
+    float: left;
+}
+
 /* From: http://css-tricks.com/perfect-full-page-background-image/ */
 body {
+    font-size: 16px;
+    line-height: 25px;
     background-color: #C7D6CE;
 	/*background: url(../img/tyto-bg2.jpg) no-repeat right center fixed;*/
 	-webkit-background-size: cover;

@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Power Owl - How Much Money Can You Save on Your Electricity Bill?</title>
+        <title>Green Button Grapher</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
@@ -33,6 +33,8 @@
     </head>
 
     <body>
+        <!-- Github ribbon -->
+        <a href="https://github.com/mtmckenna/green-button-grapher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
 
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner alpha-bg">
@@ -42,7 +44,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Power Owl - Save on Your Electricity Bill</a>
+                    <a class="brand" href="#">Green Button Grapher</a>
                     <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active"><a href="#">Home</a></li>
@@ -55,12 +57,7 @@
 
         <div class="container">
 
-            <h3>Open your GreenButton data:</h3>
-
-            <div id="file-upload" class="clearfix">
-                <input type="file" id="files" name="files[]">
-            </div>
-            <br />
+           <br />
             <div id="address"></div>
 
             <div id="time-range-btn-wrapper" class="btn-group-wrap">
@@ -87,16 +84,58 @@
                 <div id="loading-box"><h1>Loading...</h1></div>
             </div>
             <div id="main-content">
-                <div id="total"></div>
-                <div id="total-peak"></div>
-                <div id="total-saved"></div>
-                <div id="total-peak-saved"></div>
+                <div id="legend">
+                    <div id="legend-peak"></div> Peak time
+                </div>
+                <div class="row">
+                    <div class="span6">
+                        <div id="total"></div>
+                        <div id="total-peak"></div>
+                    </div>
+                    <div class="span6" id="amount-saved">
+                        <div id="total-saved"></div>
+                        <div id="total-peak-saved"></div>
+                    </div>
+                </div>
                 <div id="slider" class="slider"></div>
             </div>
-        </div> <!-- /container -->
 
-        <!-- Github ribbon -->
-        <a href="https://github.com/mtmckenna/green-button-grapher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+            <div id="file-api-alert" class="alert">
+                <strong>Sorry!</strong> Your web browser doesn't support HTML 5 file uploads.
+                If you'd like to graph your own Green Button data, please try using either <a href="https://www.google.com/chrome">Google Chrome</a> or
+                <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>.
+            </div>
+
+            <div id="open-file">
+                <h3>Open your GreenButton data:</h3>
+
+                <div id="file-upload" class="clearfix">
+                    <input type="file" id="files" name="files[]">
+                </div>
+            </div>
+
+        <div id="about">
+            <p>
+            <strong>What is Green Button Data?</strong>
+            <br />
+            Green Button Data is your electricity usage data in a format that can
+            be analyzed by apps and websites. Check with your utility provider to
+            download your Green Button Data.
+            </p>
+            <p>
+            <strong>What is this page?</strong>
+            <br />
+            This page allows users with Green Button Data to chart their usage
+            and experiment with how reducing power consumption could impact their
+            power bill.
+            </p>
+            <p>
+            <strong>Who are you?</strong>
+            <br />
+            My name is <a href="http://mtmckenna.com">Matt</a>.
+            </p>
+        </div>
+        </div> <!-- /container -->
 
         <!-- Le javascript
         ================================================== -->
