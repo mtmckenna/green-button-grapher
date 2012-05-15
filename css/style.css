@@ -94,7 +94,7 @@
 
 .navbar-inner {
     /*background: #e4efc0;*/
-	background: url(../img/tyto-bg-top.jpg) no-repeat right center fixed;
+	/*background: url(../img/tyto-bg-top.jpg) no-repeat right center fixed;*/
 }
 
 .navbar-inner a:link {color: #000000; }
@@ -115,7 +115,8 @@
 
 /* From: http://css-tricks.com/perfect-full-page-background-image/ */
 body {
-	background: url(../img/tyto-bg2.jpg) no-repeat right center fixed;
+    background-color: #C7D6CE;
+	/*background: url(../img/tyto-bg2.jpg) no-repeat right center fixed;*/
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
