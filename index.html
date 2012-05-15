@@ -11,9 +11,9 @@
         <!-- Le styles -->
         <link href="css/bootstrap2.css" rel="stylesheet" />
         <link href="css/rickshaw.min.css" rel="stylesheet" />
-        <link href="css/jquery-ui-smoothness.css" rel="stylesheet" />
         <link href="css/jquery.fileupload-ui.css" rel="stylesheet" />
         <link href="css/style.css" rel="stylesheet" />
+        <link href="css/jquery-ui-smoothness-custom.css" rel="stylesheet" />
         <style>
             body {
                 padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -66,7 +66,7 @@
 
             <div id="time-range-btn-wrapper" class="btn-group-wrap">
                 <div id="time-range-btn-group" class="btn-group graph-sel-group" data-toggle="buttons-radio">
-                    <button class="btn" data-days="1" id="most-recent-day">Most Recent Day</button>
+                    <button class="btn" data-days="1" id="most-recent-day">Most Recent 24 Hours</button>
                     <button class="btn" data-days="7" id="last-7-days">Last 7 Days</button>
                     <button class="btn" data-days="30" id="last-30-days">Last 30 Days</button>
                     <button class="btn" data-days="0" id="all-time">All Time</button>
@@ -88,22 +88,23 @@
                 <div id="loading-box"><h1>Loading...</h1></div>
             </div>
             <div id="main-content">
-                Hi
+                <div id="total"></div>
+                <div id="total-peak"></div>
+                <div id="total-saved"></div>
+                <div id="total-peak-saved"></div>
                 <div id="slider" class="slider"></div>
             </div>
         </div> <!-- /container -->
 
+        <!-- Github ribbon -->
+        <a href="https://github.com/mtmckenna"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="js/spin.js"></script>
         <script src="js/jquery.js"></script>
         <script src="js/jquery-ui.js"></script>
-        <script src="js/jquery.flot.js"></script>
-        <script src="js/jquery.spin.js"></script>
-        <script src="js/jquery.flot.resize.js"></script>
         <script src="js/jquery.pretty-file.js"></script>
-        <script src="js/jquery.xml2json.js"></script>
         <!--[if IE]>
         <script type="text/javascript" src="js/flashcanvas/flashcanvas.js"></script>
         <![endif]-->
@@ -111,8 +112,6 @@
         <script type="text/javascript" src="js/flotr2.shade.js"></script>
         <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
         <script src="js/bootstrap.js"></script>
-        <script src="js/bootstrap-tab.js"></script>
-        <script src="js/bootstrap-dropdown.js"></script>
         <script src="js/app.js"></script>
         <script src="js/livereload.js?host=localhost"></script>
     </body>

@@ -1,40 +1,3 @@
-// File API code mostly taken from examples on http://www.html5rocks.com/en/
-$(document).ready(function() {
-    console.log("Document ready...");
-
-    // Check for the various File API support.
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-        // Great success! All the File APIs are supported.
-        console.log('File APIs supported...');
-    } else {
-        console.log('File APIs NOT supported...');
-        alert("The File APIs are not fully supported in this browser.");
-    }
-
-    // Open file listener
-    document.getElementById('files').addEventListener('change', app.handleDidSelectFile, false);
-
-    // Handle button clicks from the time-range bar
-    $('#time-range-btn-group').click(function(e) { app.handleTimeRangeButtons(e); });
-
-    // Handle button clicks from the time-range bar
-    $('#avg-btn-group').click(function(e) { app.handleAvgButtons(e); });
-
-
-    // Turn slider classes into jQuery UI sliders
-    $('.slider').slider();
-
-    // Load test data
-    app.testXml();
-});
-
-// Replot on resize
-$(window).resize(function() {
-    if (app.currentReadings.length) {
-        app.plot();
-    }
-});
-
 var app = app || {};
 app.json = null;
 app.currentReadings = [];
@@ -44,6 +7,19 @@ app.avgDayReaings = [];
 app.avgWeekendDayReadings = [];
 app.avgWeekDayReadings = [];
 app.avgPeakTimeReadings = [];
+app.totalValue = 0;
+app.totalPeakValue = 0;
+app.readingType = 'cost';
+app.readingTypeMap = {
+    'cost': {
+        'units': 'Dollars',
+        'title': 'Cost of Power Over Time'
+    },
+    'value': {
+        'units': 'kWh',
+        'title': 'Power Usage Over Time'
+    }
+};
 app.modeXAxis = 'time';
 app.xMin = null;
 app.xMax = null;
@@ -56,10 +32,6 @@ app.MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May',
 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 app.hours = [];
 app.ticks = null;
-
-for (var i = 0; i <= 23; i++) {
-   app.hours.push(i);
-}
 
 app.handleTimeRangeButtons = function(e) {
     var target = e.target;
@@ -105,7 +77,17 @@ app.handleAvgButtons = function(e) {
 
 app.half = function() {
     for (var j = 0; j < app.theoReadings.length; j++) {
-        app.theoReadings[j][1] = app.theoReadings[j][1]/2;
+        app.theoReadings[j]['value'] = app.theoReadings[j]['value']/2;
+    }
+    app.plot();
+};
+
+app.updateTheoValues = function(percent) {
+    app.theoReadings = [];
+    for (var i = 0; i < app.currentReadings.length; i++) {
+        app.theoReadings[i] = {};
+        app.theoReadings[i]['start'] = app.currentReadings[i]['start'];
+        app.theoReadings[i][app.readingType] = app.currentReadings[i][app.readingType] * (.5 + percent);
     }
     app.plot();
 };
@@ -128,16 +110,21 @@ app.handleFileDidLoad = function(e) {
     $('#loading-box').hide();
 };
 
-app.testXml = function() {
+app.sliderWasSlid = function(event, ui) {
+    app.updateTheoValues(ui.value/100);
+};
+
+app.loadTestData = function() {
     $('#loading-box').show();
     console.log('Loading test XML...');
     $.ajax({
-        url: 'data/pge_sample_data.xml',
+        url: 'data/pge_sample_data2.xml',
         success: function(result) {
             //console.log(result);
             app.parseGreenButtonXml(result);
 
-            $('#avg-btn-group').click();
+            //$('#avg-btn-group').click();
+            //$('#avg-day').click();
             $('#loading-box').hide();
         }
     });
@@ -160,40 +147,51 @@ app.parseGreenButtonXml = function(xml) {
 
     // Find address, convert to text
     var address = $($(app.xml).find('entry > title')[0]).text();
-    console.log('address: ' + address);
-    $('#address').html(address);
+    $('#address').text('My Address:' + address);
 
     app.readings = [];
     app.theoReadings = [];
     for (var i = 0; i < intervals.length; i++) {
         var start = $($(intervals[i]).find('start')).text() * 1000;
         var duration = $($(intervals[i]).find('duration')).text();
+        var cost = Number($($(intervals[i]).find('cost')).text()) / 100000;
         var value = $($(intervals[i]).find('value')).text();
 
         //var date = new Date(start);
-        app.readings.push([start, Number(value)]);
+        app.readings.push({'start': start,
+        'value': Number(value),
+        'cost': Number(cost)});
     }
 
     // I think the readings will be sorted from the get-go, but
     // might as well make sure...
-    app.readings.sort(function(a, b) { return a[0] - b[0]; });
+    app.readings.sort(app.sortReadingsByStart);
 
-    app.xMin = app.readings[0][0];
-    app.xMax = app.readings[app.readings.length - 1][0];
+    app.xMin = app.readings[0]['start'];
+    app.xMax = app.readings[app.readings.length - 1]['start'];
 
     app.setCurrentReadings(app.readings);
-    app.plot();
+
+    if (app.currentReadings[0]['cost'] === 0) {
+        app.readingType = 'value';
+    } else {
+        app.readingType = 'cost';
+    }
+
+    // This will be the default chart
+    $('#averages').click();
 };
 
 app.getShadedRanges = function() {
     var ranges = [];
     var start = null;
 
-    if (Number(app.xMax) === Number(23)) {
-        return [[12, 19]];
+    // If xMax <= 23, then there must only be a day's worth of data
+    if (Number(app.xMax) <= Number(23)) {
+        app.shadedRanges = [[12, 19]];
+        return;
     }
 
-    console.log(app.xMin + ' <- xMin');
     var HOUR = 1000 * 60 * 60;
     var minDate = new Date(app.xMin);
     minDate.setHours(1, 0, 0, 0);
@@ -203,52 +201,11 @@ app.getShadedRanges = function() {
     maxDate.setHours(23, 0, 0, 0);
     var maxTime = maxDate.getTime();
 
-
-console.log ('max: ' + maxTime + 'min: ' + minTime);
-    // Trying to get all time ranges between 12-19.
-    // TODO: Find a better way to do this...
-    /*if (minHour >= 12 || minHour < 19) {
-        var firstRange = [];
-        firstRange[0] =
-            app.currentReadings[app.getDateIndex(new Date(app.xMin))][0];
-        firstRange[1] = 19 * HOUR + Number(firstRange[0]);
-        console.log('first hour: ' + firstRange);
-        ranges.push(firstRange);
-    }*/
-
     for (var i = minTime; i < maxTime; i += app.DAY_IN_MS) {
-        console.log('date: ' + new Date(i));
-        console.log('0: ' + new Date(i + 12 * HOUR) + ' 1: ' +
-        new Date(i + 19 * HOUR));
-        console.log('i: ' + i);
-       ranges.push([i + 12 * HOUR, i + 19 * HOUR]);
+        ranges.push([i + 12 * HOUR, i + 19 * HOUR]);
     }
 
-    console.log(ranges);
-    return ranges;
-
-    /*for (var i = 0; i < app.readings.length; i++) {
-        var day = new Date(app.readings[i][0]).getDay();
-        var hour = new Date(app.readings[i][0]).getHours();
-
-        // If a weekday between 12PM-6PM
-        if ((day >= 1 && day <= 5) && (hour >= 12 && hour <= 18)) {
-            if (start === null) {
-                start = app.readings[i][0];
-                console.log('start: ' + hour);
-                //start = hour;
-            }
-        } else {
-            if (start !== null) {
-               ranges.push([start, app.readings[i][0]]);
-                console.log('end: ' + hour);
-               //ranges.push([start, hour]);
-               start = null;
-            }
-        }
-    }*/
-
-    return ranges;
+    app.shadedRanges = ranges;
 };
 
 // Returns index of app.intervals of the first instance of the passed date
@@ -261,7 +218,7 @@ app.getDateIndex = function(dateToFind) {
     // Binary search
     while (minIndex <= maxIndex) {
         var midIndex = Math.floor((maxIndex + minIndex)/2);
-        var date = new Date(app.readings[midIndex][0]);
+        var date = new Date(app.readings[midIndex]['start']);
         date.setHours(0, 0, 0, 0);
 
         // If we have a match, return index
@@ -284,19 +241,24 @@ app.getDateIndex = function(dateToFind) {
     return  midIndex;
 };
 
+app.getXMinXMax = function() {
+    app.xMin = app.currentReadings[0]['start'];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1]['start'];
+}
 app.getYMinYMax = function() {
     app.yMin = 0;
-    app.yMax = 10;
+    app.yMax = .1;
 
     // TODO: this method can be more efficient
     for (var i = 0; i < app.currentReadings.length; i++) {
-        if (app.currentReadings[i][0] < app.xMin ||
-        app.currentReadings[i][0] > app.xMax) {
+        if (app.currentReadings[i]['start'] < app.xMin ||
+        app.currentReadings[i]['start'] > app.xMax) {
             continue;
         }
 
-        var reading = app.currentReadings[i][1];
+        var reading = app.currentReadings[i][app.readingType];
 
+        //console.log('reading: ' + reading);
         if (reading > app.yMax) {
             app.yMax = reading;
             continue;
@@ -308,41 +270,105 @@ app.getYMinYMax = function() {
     }
 };
 
-app.getAvgArray = function(dateDict) {
+app.getTotals = function() {
+    app.totalValue = 0;
+    app.totalPeakValue = 0;
+    var i, j;
+
+    // TODO: this code is not efficient.
+    for (i = 0; i < app.currentReadings.length; i++) {
+        var start = app.currentReadings[i]['start'];
+        var value = app.currentReadings[i][app.readingType];
+        if (start < app.xMin) continue;
+        if (start > app.xMax) break;
+        app.totalValue += value;
+
+        for (j = 0; j < app.shadedRanges.length; j++) {
+            var begin = app.shadedRanges[j][0];
+            var end = app.shadedRanges[j][1];
+            if (start >= begin && start < end) {
+                app.totalPeakValue += value;
+            }
+        }
+    }
+};
+
+app.getReadingsByHour = function(readings) {
+    var readingsByHour = {};
+    for (var i = 0; i < readings.length; i++) {
+        var hour = new Date(readings[i]['start']).getHours();
+
+        // If this day is already in array, push value on top
+        var updatedHour = readingsByHour[hour] || [];
+        updatedHour.push({
+            'value': readings[i]['value'],
+            'cost': readings[i]['cost']
+        });
+        readingsByHour[hour] = updatedHour;
+    }
+
+    return readingsByHour;
+}
+
+app.getAvgArray = function(readings) {
+    var readingsByHour = {};
+    var i, j;
+    for (i = 0; i < readings.length; i++) {
+        var hour = new Date(readings[i]['start']).getHours();
+
+        // If this day is already in array, push value on top
+        var updatedHour = readingsByHour[hour] || [];
+        updatedHour.push({
+            'value': readings[i]['value'],
+            'cost': readings[i]['cost']
+        });
+        readingsByHour[hour] = updatedHour;
+    }
+
     var dateAverages = [];
-    var i = 0;
-    for (var date in dateDict) {
+    i = 0;
+    for (var date in readingsByHour) {
         var valueSum = 0;
-        var dateArray = dateDict[date];
+        var costSum = 0;
+        var dateArray = readingsByHour[date];
         // Would like to use reduce here...
         //console.log('date: ' + dateArray);
-        for (var j = 0; j < dateArray.length; j++) {
-           valueSum += dateArray[j];
+        for (j = 0; j < dateArray.length; j++) {
+           valueSum += dateArray[j]['value'];
+           costSum += dateArray[j]['cost'];
         }
-       dateAverages[i] = [date, valueSum/dateArray.length];
+
+        dateAverages[i] = {
+            'start': date,
+            'cost': costSum/dateArray.length,
+            'value': valueSum/dateArray.length
+        };
+
        i++;
     }
 
     return dateAverages;
 };
 
+app.sortReadingsByStart = function(a, b) { return a['start'] - b['start']; };
+
 app.plotPreviousDays = function(numDays) {
     // TODO: Check if data has been loaded
-    app.xMax = app.readings[app.readings.length - 1][0];
+    app.xMax = app.readings[app.readings.length - 1]['start'];
     app.modeXAxis = 'time';
     app.ticks = null;
 
     // Date numDays from the most recent date
     if (numDays === 0) {
-        app.xMin = app.readings[0][0];
+        app.xMin = app.readings[0]['start'];
     } else {
         var dateToFind = new Date(app.xMax - numDays * app.DAY_IN_MS);
-        app.xMin = app.readings[app.getDateIndex(dateToFind)][0];
+        var index = app.getDateIndex(dateToFind);
+        app.xMin = app.readings[index]['start'];
     }
 
-    app.readings.sort(function(a, b) { return a[0] - b[0]; });
+    app.readings.sort(app.sortReadingsByStart);
     app.setCurrentReadings(app.readings);
-    app.shadedRanges = app.getShadedRanges();
     app.plot();
 };
 
@@ -351,111 +377,95 @@ app.plotPreviousDays = function(numDays) {
 app.plotAvgDay = function() {
     app.modeXAxis = 'normal';
     app.ticks = app.hours;
-    var readingsByHour = {};
-    for (var i = 0; i < app.readings.length; i++) {
-        var hour = new Date(app.readings[i][0]).getHours();
-
-        // If this day is already in array, push value on top
-        var updatedHour = readingsByHour[hour] || [];
-        updatedHour.push(app.readings[i][1]);
-        readingsByHour[hour] = updatedHour;
-    }
-
-    app.avgDayReadings = app.getAvgArray(readingsByHour);
-    app.avgDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.avgDayReadings = app.getAvgArray(app.readings);
+    app.avgDayReadings.sort(app.sortReadingsByStart);
     app.setCurrentReadings(app.avgDayReadings);
 
-    app.xMin = app.currentReadings[0][0];
-    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
-    app.shadedRanges = app.getShadedRanges();
+    app.xMin = app.currentReadings[0]['start'];
+    app.xMax = app.currentReadings[app.currentReadings.length - 1]['start'];
+
+    app.getXMinXMax();
 
     app.plot();
 };
 
 app.plotAvgWeekendDay = function() {
-    var readingsByHour = {};
-    for (var i = 0; i < app.readings.length; i++) {
-        var day = new Date(app.readings[i][0]).getDay();
-        if (day !== 0 && day !== 6) { continue; }
 
-        var hour = new Date(app.readings[i][0]).getHours();
+    var filteredReadings = app.readings.filter(function(reading) {
+        var day = new Date(reading['start']).getDay();
+        return day === 0 || day === 6;
+    });
 
-        // If this day is already in array, push value on top
-        var updatedHour = readingsByHour[hour] || [];
-        updatedHour.push(app.readings[i][1]);
-        readingsByHour[hour] = updatedHour;
-    }
-
-    app.avgWeekendDayReadings = app.getAvgArray(readingsByHour);
-    app.avgWeekendDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.avgWeekendDayReadings = app.getAvgArray(filteredReadings);
+    app.avgWeekendDayReadings.sort(app.sortReadingsByStart);
     app.setCurrentReadings(app.avgWeekendDayReadings);
 
-    app.xMin = app.currentReadings[0][0];
-    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+    app.getXMinXMax();
 
     app.plot();
 };
 
 app.plotAvgWeekDay = function() {
-    var readingsByHour = {};
-    for (var i = 0; i < app.readings.length; i++) {
-        var day = new Date(app.readings[i][0]).getDay();
-        if (day === 0 && day === 6) { continue; }
+    var filteredReadings = app.readings.filter(function(reading) {
+        var day = new Date(reading['start']).getDay();
+        return day !== 0 || day !== 6;
+    });
 
-        var hour = new Date(app.readings[i][0]).getHours();
-
-        // If this day is already in array, push value on top
-        var updatedHour = readingsByHour[hour] || [];
-        updatedHour.push(app.readings[i][1]);
-        readingsByHour[hour] = updatedHour;
-    }
-
-    app.avgWeekDayReadings = app.getAvgArray(readingsByHour);
-    app.avgWeekDayReadings.sort(function(a, b) { return a[0] - b[0]; });
+    app.avgWeekDayReadings = app.getAvgArray(filteredReadings);
+    app.avgWeekDayReadings.sort(app.sortReadingsByStart);
     app.setCurrentReadings(app.avgWeekDayReadings);
 
-    app.xMin = app.currentReadings[0][0];
-    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+    app.getXMinXMax();
 
     app.plot();
 };
 
 app.plotAvgPeakTime = function() {
-    var readingsByHour = {};
-    for (var i = 0; i < app.readings.length; i++) {
-        var day = new Date(app.readings[i][0]).getDay();
-        var hour = new Date(app.readings[i][0]).getHours();
-        if (day === 0 && day === 6) { continue; }
-        if (hour < 12 || hour > 18) { continue; }
+    var filteredReadings = app.readings.filter(function(reading) {
+        var day = new Date(reading['start']).getDay();
+        var hour = new Date(reading['start']).getHours();
 
-        var hour = new Date(app.readings[i][0]).getHours();
+        return ((day !== 0 && day !== 6) && (hour >= 12 && hour <= 18));
+    });
 
-        // If this day is already in array, push value on top
-        var updatedHour = readingsByHour[hour] || [];
-        updatedHour.push(app.readings[i][1]);
-        readingsByHour[hour] = updatedHour;
-    }
+    app.avgPeakTimeReadings = app.getAvgArray(filteredReadings);
+    app.avgPeakTimeReadings.sort(app.sortReadingsByStart);
+    app.setCurrentReadings(app.avgPeakTimeReadings);
 
-    app.avgWeekendDayReadings = app.getAvgArray(readingsByHour);
-    app.avgWeekendDayReadings.sort(function(a, b) { return a[0] - b[0]; });
-    app.setCurrentReadings(app.avgWeekendDayReadings);
-
-    app.xMin = app.currentReadings[0][0];
-    app.xMax = app.currentReadings[app.currentReadings.length - 1][0];
+    app.getXMinXMax();
 
     app.plot();
 };
 
 app.plot = function() {
-    console.log('plot');
-    var series = [{data: app.currentReadings, lines: {fill: true}}];
+    console.log('plotting...');
+    app.getShadedRanges();
+    app.getTotals();
+
+    var readings = [];
+    var theoReadings = [];
+    for (var i = 0; i < app.currentReadings.length; i++) {
+       readings.push([app.currentReadings[i]['start'],
+       app.currentReadings[i][app.readingType]]);
+
+       theoReadings.push([app.theoReadings[i]['start'],
+       app.theoReadings[i][app.readingType]]);
+    }
+
+    var series = [{data: readings, lines: {fill: true}}];
 
     // If theoretical readings are different from actual, draw theo readings too
     if (!$(app.currentReadings).compare(app.theoReadings)) {
-        series.push({data: app.theoReadings, lines: {fill: true}});
+    console.log('hi');
+        series.push({data: theoReadings, lines: {fill: true}});
     }
 
+    console.log(series);
+
     app.getYMinYMax();
+
+    $('#total').text('Total Cost:' + Math.round(app.totalValue * 100)/100);
+    $('#total-peak').text('Cost During Peak Time: ' + Math.round(app.totalPeakValue * 100)/100);
 
     // Draw Graph
     var graph = Flotr.draw($('#graph')[0], series, {
@@ -469,8 +479,8 @@ app.plot = function() {
             noTicks: 10,
             tickFormatter: function(o) { return app.timeTickFormatter(o); },
             shade: {'ranges': app.shadedRanges,
-                'fillColor': 'red',
-                'fillOpacity': '.5'
+                'fillColor': '#e88ba1',
+                'fillOpacity': '1'
             }
         },
         yaxis: {
@@ -478,17 +488,20 @@ app.plot = function() {
             max: app.yMax * 1.05,
             showLabels: true,
             titleAngle: 90,
-            title: 'kWh',
+            title: app.readingTypeMap[app.readingType]['units'],
             minorTicks: true,
+            tickDecimals: 2,
             showMinorLabels: true
         },
         grid: {
             horizontalLines: false,
             verticalLines: false,
-            outlineWidth: 0
+            outlineWidth: 1,
+            backgroundColor: '#d7e0d2',
+            fillOpacity: .4
         },
         lines: {
-            fill: true,
+            fill: false,
             fillOpacity: 1
         },
         mouse: {
@@ -497,7 +510,7 @@ app.plot = function() {
             trackY: false
         },
         HtmlText: false,
-        title: 'Power Usage Over Time'
+        title: app.readingTypeMap[app.readingType]['title']
     });
 };
 
@@ -548,9 +561,55 @@ app.timeTickFormatter = function (o) {
 jQuery.fn.compare = function(t) {
     if (this.length != t.length) { return false; }
     for (var i = 0; t[i]; i++) {
-        if (this[i][1] !== t[i][1]) {
+        if (this[i]['value'] !== t[i]['value']) {
             return false;
         }
     }
     return true;
 };
+
+// File API code mostly taken from examples on http://www.html5rocks.com/en/
+$(document).ready(function() {
+    console.log("Document ready...");
+
+    for (var i = 0; i <= 23; i++) {
+        app.hours.push(i);
+    }
+
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+        console.log('File APIs supported...');
+    } else {
+        console.log('File APIs NOT supported...');
+        alert("The File APIs are not fully supported in this browser.");
+    }
+
+    // Open file listener
+    document.getElementById('files').addEventListener('change', app.handleDidSelectFile, false);
+
+    // Handle button clicks from the time-range bar
+    $('#time-range-btn-group').click(function(e) { app.handleTimeRangeButtons(e); });
+
+    // Handle button clicks from the time-range bar
+    $('#avg-btn-group').click(function(e) { app.handleAvgButtons(e); });
+
+    // Turn slider classes into jQuery UI sliders
+    $('.slider').slider({ range: 'min' });
+    $('#slider').slider('value', 50);
+
+    $('#slider').slider({
+        slide: function(event, ui) { app.sliderWasSlid(event, ui); }
+    });
+
+    // Load test data
+    app.loadTestData();
+});
+
+// Replot on resize
+$(window).resize(function() {
+    if (app.currentReadings.length) {
+        app.plot();
+    }
+});
+
