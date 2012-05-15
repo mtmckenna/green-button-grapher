@@ -142,7 +142,7 @@ app.parseGreenButtonXml = function(xml) {
 
     // Find address, convert to text
     var address = $($(app.xml).find('entry > title')[0]).text();
-    $('#address').text('My Address:' + address);
+    $('#address').text(address);
 
     app.readings = [];
     app.theoReadings = [];
@@ -280,7 +280,7 @@ app.getTotals = function() {
         var value = app.currentReadings[i][app.readingType];
         var theoValue = app.theoReadings[i][app.readingType];
         if (start < app.xMin) continue;
-        if (start > app.xMax) break;
+        if (start > app.xMax) continue;
         app.totalValue += value;
         app.totalTheoValue += theoValue;
 
