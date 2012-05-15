@@ -471,8 +471,11 @@ app.plot = function() {
         $('#total-saved').html('<strong>Total cost saved:</strong> $' + Math.round((app.totalValue - app.totalTheoValue) * 100)/100);
         $('#total-peak-saved').html('<strong>Total cost saved during peak time:</strong> $' + Math.round((app.totalPeakValue - app.totalTheoPeakValue) * 100)/100);
     } else {
-        $('#total').html('<strong>Total power usage:</strong> $' + Math.round(app.totalValue * 100)/100);
-        $('#total-peak').html('<strong>Total usage during peak time:</strong> $' + Math.round(app.totalPeakValue * 100)/100);
+        $('#total').html('<strong>Total power usage:</strong> ' + Math.round(app.totalValue * 100)/100 + 'kWh');
+        $('#total-peak').html('<strong>Total usage during peak time:</strong> ' + Math.round(app.totalPeakValue * 100)/100 + 'kWh');
+        $('#total-saved').html('<strong>Total power saved:</strong> ' + Math.round((app.totalValue - app.totalTheoValue) * 100)/100 + 'kWh');
+        $('#total-peak-saved').html('<strong>Total power saved during peak time:</strong> ' + Math.round((app.totalPeakValue - app.totalTheoPeakValue) * 100)/100 + 'kWh');
+
     }
 
     // Draw Graph
