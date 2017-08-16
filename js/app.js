@@ -495,8 +495,8 @@ app.plot = function() {
             }
         },
         yaxis: {
-            min: app.yMin * 0.95,
-            max: app.yMax * 1.05,
+            min: app.yMin - Math.abs(app.yMin)* 0.05,
+            max: app.yMax + Math.abs(app.yMax)* 0.05,
             showLabels: true,
             titleAngle: 90,
             title: app.readingTypeMap[app.readingType]['units'],
