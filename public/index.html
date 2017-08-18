@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <title>Green Button Grapher</title>
+
+    <link href="css/jquery.fileupload-ui.css" type="text/css" rel="stylesheet" />
+    <link href="css/jquery-ui.min.css" type="text/css" rel="stylesheet" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.pretty-file.js"></script>
+    <script type="text/javascript" src="js/flotr2.min.js"></script>
+    <script type="text/javascript" src="js/flotr2.shade.js"></script>
+    <script src="js/app.js"></script>
+
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+      <!--
+        This HTML file is a template.
+        If you open it directly in the browser, you will see an empty page.
+
+        You can add webfonts, meta tags, or analytics to this file.
+        The build step will place the bundled scripts into the <body> tag.
+
+        To begin the development, run `npm start` or `yarn start`.
+        To create a production bundle, use `npm run build` or `yarn build`.
+      -->
+
+      <div id="address"></div>
+
+      <div id="time-range-btn-wrapper" class="btn-group-wrap">
+        <div id="time-range-btn-group" class="btn-group graph-sel-group" data-toggle="buttons-radio">
+          <button class="btn" data-days="1" id="most-recent-day">Most Recent 24 Hours</button>
+          <button class="btn" data-days="7" id="last-7-days">Last 7 Days</button>
+          <button class="btn" data-days="30" id="last-30-days">Last 30 Days</button>
+          <button class="btn" data-days="0" id="all-time">All Time</button>
+          <button class="btn" id="averages">Averages</button>
+        </div>
+      </div>
+
+      <div id="avg-btn-wrapper" class="btn-group-wrap">
+        <div id="avg-btn-group" class="btn-group graph-sel-group" data-toggle="buttons-radio">
+          <button class="btn" id="avg-day">Day</button>
+          <button class="btn" id="avg-weekend-day">Weekend Day</button>
+          <button class="btn" id="avg-week-day">Week Day</button>
+          <button class="btn" id="avg-peak-time">Peak Time</button>
+        </div>
+      </div>
+
+      <div id="graph-wrapper">
+        <div id="graph"></div>
+        <div id="loading-box"><h1>Loading...</h1></div>
+      </div>
+
+      <div id="main-content">
+        <div id="slider" class="slider"></div>
+        <div id="legend">
+          <div id="legend-peak"></div> Peak time
+        </div>
+        <div class="row">
+          <div class="span6">
+            <div id="total"></div>
+            <div id="total-peak"></div>
+          </div>
+          <div class="span6" id="amount-saved">
+            <div id="total-saved"></div>
+            <div id="total-peak-saved"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="file-api-alert" class="alert">
+        <strong>Sorry!</strong> Your web browser doesn't support HTML 5 file uploads.
+        If you'd like to graph your own Green Button data, please try using either <a href="https://www.google.com/chrome">Google Chrome</a> or
+        <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>.
+      </div>
+
+      <div id="open-file">
+        <h3>Open your GreenButton data:</h3>
+        <div id="file-upload" class="clearfix">
+          <input type="file" id="files" name="files[]">
+        </div>
+      </div>
+        </body>
+</html>
+
