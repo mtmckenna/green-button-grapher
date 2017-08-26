@@ -12,5 +12,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "nightmare": "^2.10.0",
+    "nightmare-upload": "^0.1.1"
   }
 }
