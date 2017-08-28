@@ -88,21 +88,9 @@ app.updateTheoValues = function(percent) {
 };
 
 app.handleDidSelectFile = function(e) {
-    $('#loading-box').show();
-    var files = e.target.files; // FileList object
-
-    var reader = new FileReader();
-    reader.onloadend = app.handleFileDidLoad;
-    reader.readAsText(files[0]);
 };
 
 app.handleFileDidLoad = function(e) {
-    console.log("here in handleFileDidLoad");
-    var xmlString = e.target.result;
-    var xml = $.parseXML(e.target.result);
-    //$('#content').text(xmlString);
-    app.parseGreenButtonXml(xmlString);
-    $('#loading-box').hide();
 };
 
 app.sliderWasSlid = function(event, ui) {
@@ -582,21 +570,6 @@ $(document).ready(function() {
         app.hours.push(i);
     }
 
-    // Check for the various File API support.
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-        // Great success! All the File APIs are supported.
-        console.log('File APIs supported...');
-        $('#file-api-alert').hide();
-        $('#open-file').show();
-    } else {
-        console.log('File APIs NOT supported...');
-        $('#file-api-alert').show();
-        $('#open-file').hide();
-    }
-
-    // Open file listener
-    document.getElementById('files').addEventListener('change', app.handleDidSelectFile, false);
-
     // Handle button clicks from the time-range bar
     $('#time-range-btn-group').click(function(e) { app.handleTimeRangeButtons(e); });
 
@@ -613,12 +586,5 @@ $(document).ready(function() {
 
     // Load test data
     app.loadTestData();
-});
-
-// Replot on resize
-$(window).resize(function() {
-    if (app.currentReadings.length) {
-        app.plot();
-    }
 });
 
