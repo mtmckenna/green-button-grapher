@@ -1,5 +1,3 @@
-/* global app, $ */
-
 import React, { Component } from 'react';
 
 export default class FileOpener extends Component {
@@ -10,17 +8,16 @@ export default class FileOpener extends Component {
   }
 
   handleFileSelected(event) {
-    $('#loading-box').show();
     let files = event.target.files;
     let reader = new FileReader();
     reader.onloadend = this.handleFileLoaded;
     reader.readAsText(files[0]);
+    this.props.handleFileSelected(event);
   }
 
   handleFileLoaded(event) {
     let xmlString = event.target.result;
-    app.parseGreenButtonXml(xmlString);
-    $('#loading-box').hide();
+    this.props.handleFileLoaded(xmlString);
   }
 
   render() {

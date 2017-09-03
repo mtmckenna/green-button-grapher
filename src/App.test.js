@@ -14,20 +14,24 @@ it('renders without crashing', () => {
 
 describe('When the app boots', function () {
   test('it displays test data and can parse a new file', async function () {
-    const TEST_FILE_RELATIVE_PATH = '/public/data/Mountain_Single_family_Jan_1_2011_to_Jan_1_2012.xml';
-    const UPDATED_GBD_FILE_PATH = `${process.cwd()}${TEST_FILE_RELATIVE_PATH}`;
+    const SECOND_FILE_PATH = '/public/data/Mountain_Single_family_Jan_1_2011_to_Jan_1_2012.xml';
+    const FULL_SECOND_FILE_PATH = `${process.cwd()}${SECOND_FILE_PATH}`;
 
     let page = visit('/');
 
     let initialText = await page
-      .wait(() => document.body.textContent.includes('123 PRETEND ST BERKELEY CA 94707-2701'))
+      .wait(() => {
+        console.log('supsup');
+        return document.body.textContent.includes('123 PRETEND ST BERKELEY CA 94707-2701');
+      })
       .evaluate(() => document.body.textContent);
 
     expect(initialText).toContain('Total cost: $0.93');
     expect(initialText).toContain('Cost during peak time: $0.45');
 
+    page.upload("input[type='file']", FULL_SECOND_FILE_PATH);
+
     let textAfterUpload = await page
-      .upload("[type='file']", UPDATED_GBD_FILE_PATH)
       .wait(() => document.body.textContent.includes('Mountain Single-family'))
       .evaluate(() => document.body.textContent)
       .end();
