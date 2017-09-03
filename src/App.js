@@ -21,6 +21,7 @@ class App extends Component {
     this.state = {};
     this.handleFileLoaded = this.handleFileLoaded.bind(this);
     this.handleFileSelected = this.handleFileSelected.bind(this);
+    this.handleSliderMoved = this.handleSliderMoved.bind(this);
     this.parseGreenButtonXml = this.parseGreenButtonXml.bind(this);
     this.parsedData = Object.assign({}, ParsedData);
   }
@@ -69,6 +70,10 @@ class App extends Component {
     $('#loading-box').show();
   }
 
+  handleSliderMoved(event) {
+    this.parsedData.sliderWasSlid(event);
+  }
+
   parseGreenButtonXml(xml) {
     var intervals = $(xml).find('IntervalReading');
     var address = $($(xml).find('entry > title')[0]).text();
@@ -112,7 +117,7 @@ class App extends Component {
       <div id="address">{this.state.address}</div>
       <TimeButtons />
       <Graph />
-      <Slider />
+      <Slider handleSliderMoved={this.handleSliderMoved} />
       <Results />
       <div id="legend-peak"></div> Peak time
       <FileOpener

@@ -94,7 +94,7 @@ app.handleFileDidLoad = function(e) {
 };
 
 app.sliderWasSlid = function(event, ui) {
-  this.updateTheoValues(ui.value/100);
+  this.updateTheoValues(event.currentTarget.value/100);
 };
 
 app.setCurrentReadings = function(readings) {
