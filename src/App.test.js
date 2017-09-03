@@ -21,7 +21,6 @@ describe('When the app boots', function () {
 
     let initialText = await page
       .wait(() => {
-        console.log('supsup');
         return document.body.textContent.includes('123 PRETEND ST BERKELEY CA 94707-2701');
       })
       .evaluate(() => document.body.textContent);
