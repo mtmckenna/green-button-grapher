@@ -10,6 +10,7 @@ import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
 import chartTypes from './chart-types';
 import dataViewTypes from './data-view-types';
+import GreenButtonJson from './green-button-json';
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class App extends Component {
     this.handleFileSelected = this.handleFileSelected.bind(this);
     this.handleSliderMoved = this.handleSliderMoved.bind(this);
     this.parseGreenButtonXml = this.parseGreenButtonXml.bind(this);
+    this.greenButtonJson = new GreenButtonJson();
   }
 
   componentDidMount() {
@@ -49,27 +51,22 @@ class App extends Component {
     //this.parsedData.updateTheoValues(event.currentTarget.value/100);
   }
 
-  storeAddress(xml) {
-    let address = xml.querySelector('entry > title').innerHTML;
-    this.setState({address: address});
-  }
-
-  storeIntervalReadings(xml) {
-    let intervals = intervalsFromXml(xml);
-
-    this.setState({
-      data: {
-        starts: intervals.map((interval) => interval.start),
-        values: intervals.map((interval) => interval.value),
-        costs: intervals.map((interval) => interval.cost)
-      }
-    });
-  }
-
   parseGreenButtonXml(xmlString) {
     let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
-    this.storeAddress(xml);
-    this.storeIntervalReadings(xml);
+    this.greenButtonJson = new GreenButtonJson(xml);
+    this.setState({
+      address: this.greenButtonJson.address,
+      data: this.greenButtonJson.chartFormattedIntervals
+    });
+
+    this.setState({
+      results: {
+        total: this.greenButtonJson.total,
+        totalPeak: 0,
+        totalTheoretical: 0,
+        totalPeakTheoretical: 0
+      }
+    });
   }
 
   render() {
@@ -93,19 +90,6 @@ class App extends Component {
       </div>
     );
   }
-}
-
-function intervalsFromXml(xml) {
-  let xmlIntervals = Array.from(xml.querySelectorAll('IntervalReading'));
-
-  return xmlIntervals.map(function(interval) {
-    let costElement = interval.getElementsByTagName('cost')[0];
-    return {
-      start: interval.getElementsByTagName('start')[0].innerHTML,
-      value: interval.getElementsByTagName('value')[0].innerHTML,
-      cost: costElement ? costElement.innerHTML : 0.0
-    }
-  });
 }
 
 export default App;
