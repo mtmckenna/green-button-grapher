@@ -38,6 +38,10 @@ const app = {
   ticks: null
 }
 
+for (var i = 0; i <= 23; i++) {
+  app.hours.push(i);
+}
+
 app.handleTimeRangeButtons = function(e) {
   var target = e.target;
 
@@ -88,13 +92,6 @@ app.updateTheoValues = function(percent) {
     this.theoReadings[i][this.readingType] = this.currentReadings[i][this.readingType] * (0.5 + percent);
   }
   this.plot();
-};
-
-app.handleFileDidLoad = function(e) {
-};
-
-app.sliderWasSlid = function(event, ui) {
-  this.updateTheoValues(event.currentTarget.value/100);
 };
 
 app.setCurrentReadings = function(readings) {
@@ -219,6 +216,15 @@ app.getTotals = function() {
       }
     }
   }
+
+  let totals = {
+    total: this.totalValue,
+    totalPeak: this.totalPeakValue,
+    totalTheoretical: this.totalTheoValue,
+    totalPeakTheoretical: this.totalTheoPeakValue
+  };
+  console.log('1', totals);
+  return totals;
 };
 
 app.getReadingsByHour = function(readings) {
