@@ -19,7 +19,7 @@ export default class GreenButtonJson {
     this._intervals = xmlIntervals.map(function(interval) {
       let costElement = interval.getElementsByTagName('cost')[0];
       return {
-        start: Number(interval.getElementsByTagName('start')[0].innerHTML),
+        start: dateFromStart(interval.getElementsByTagName('start')[0].innerHTML),
         value: Number(interval.getElementsByTagName('value')[0].innerHTML),
         cost: costElement ? Number(costElement.innerHTML) / COST_DIVISOR : 0.0
       }
@@ -32,7 +32,7 @@ export default class GreenButtonJson {
     if (this._chartFormattedIntervals) return this._chartFormattedIntervals;
 
     this._chartFormattedIntervals = {
-      starts: this.intervals.map((interval) => interval.start),
+      starts: this.intervals.map((interval) => formattedDateTime(interval.start)),
       values: this.intervals.map((interval) => interval.value),
       costs: this.intervals.map((interval) => interval.cost)
     }
@@ -41,8 +41,50 @@ export default class GreenButtonJson {
   }
 
   get total() {
-    return this.intervals.reduce(function(sum, interval) {
-      return sum + interval.cost;
-    }, 0);
+    return totalCostOfIntervals(this.intervals);
   }
+
+  get totalPeak() {
+    return totalCostOfIntervals(peakIntervals(this.intervals));
+  }
+}
+
+function peakIntervals(intervals) {
+  return intervals.filter(function(interval) {
+    return dateIsPeak(interval.start);
+  })
+}
+
+function totalCostOfIntervals(intervals) {
+  return intervals.reduce(function(sum, interval) {
+    return sum + interval.cost;
+  }, 0);
+}
+
+function dateIsPeak(date) {
+  const day = date.getDay();
+  const hour = date.getHours();
+  const weekday = day > 0 && day < 6;
+  const peakHours = hour >= 12 && hour <= 18
+  return weekday && peakHours;
+}
+
+function dateFromStart(startString) {
+  const startInMs = Number(startString) * 1000;
+  return new Date(startInMs);
+}
+
+function datePad(number) {
+  let string = number.toString();
+  while (string.length < 2) string = 0 + string;
+  return string;
+}
+
+function formattedDateTime(date) {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minutes = date.getMinutes();
+  return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
 }

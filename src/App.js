@@ -62,7 +62,7 @@ class App extends Component {
     this.setState({
       results: {
         total: this.greenButtonJson.total,
-        totalPeak: 0,
+        totalPeak: this.greenButtonJson.totalPeak,
         totalTheoretical: 0,
         totalPeakTheoretical: 0
       }
