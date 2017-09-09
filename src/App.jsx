@@ -8,7 +8,7 @@ import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
 import chartTypes from './chart-types';
-import dataViewTypes from './data-view-types';
+import timeCut from './time-cuts';
 import GreenButtonJson from './green-button-json';
 
 class App extends Component {
@@ -19,7 +19,7 @@ class App extends Component {
       greenButtonJson: {},
       multiplier: 1.0,
       chartType: chartTypes.COST,
-      dataViewType: dataViewTypes.AVG_DAY,
+      timeCut: timeCut.AVG_DAY,
       loading: true
     };
   }
@@ -46,13 +46,17 @@ class App extends Component {
     this.setState({ multiplier: multiplier });
   }
 
-  parseGreenButtonXml = function(xmlString) {
+  parseGreenButtonXml = (xmlString) => {
     let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
     this.greenButtonJson = new GreenButtonJson(xml);
     this.setState({
       greenButtonJson: this.greenButtonJson,
       address: this.greenButtonJson.address
     });
+  }
+
+  changeChartType = (chartType) => {
+    this.setState({ chartType: chartType });
   }
 
   render() {
@@ -65,12 +69,15 @@ class App extends Component {
           loading={this.state.loading}
           multiplier={this.state.multiplier}
           greenButtonJson={this.state.greenButtonJson}
+          chartType={this.state.chartType}
         />
         <Slider
           multiplier={this.state.multiplier}
           handleSliderMoved={this.handleSliderMoved}
         />
-        <ChartButtons />
+        <ChartButtons
+          changeChartType={this.changeChartType}
+        />
         <FileOpener
           handleFileSelected={this.handleFileSelected}
           handleFileLoaded={this.handleFileLoaded}

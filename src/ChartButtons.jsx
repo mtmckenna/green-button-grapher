@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import chartTypes from './chart-types';
 
 export default class ChartButtons extends Component {
+  changeChartType = (event) => {
+    this.props.changeChartType(event.target.dataset.chartType);
+  }
+
   render() {
     return (
       <div>
@@ -23,8 +28,12 @@ export default class ChartButtons extends Component {
         <fieldset>
           <legend>Chart Type</legend>
           <div>
-            <button>Cost</button>
-            <button>Power Usage</button>
+            <button
+              data-chart-type={chartTypes.COST}
+              onClick={this.changeChartType}>Cost</button>
+            <button
+              data-chart-type={chartTypes.POWER_USAGE}
+              onClick={this.changeChartType}>Power Usage</button>
           </div>
         </fieldset>
       </div>

@@ -14,7 +14,11 @@ export default class Graph extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const data = new ChartData(nextProps.greenButtonJson.intervals, nextProps.multiplier);
+    const data = new ChartData(
+      nextProps.greenButtonJson.intervals,
+      nextProps.chartType,
+      nextProps.multiplier);
+
     this.setState({
       data: data,
       results: {
@@ -66,7 +70,7 @@ function datasetsFromIntervals(intervals) {
       fill: 'origin',
       pointRadius: 0,
       label: 'Cost of Power Over Time',
-      data: intervals.actual.costs,
+      data: intervals.actual.data,
       backgroundColor: ['rgba(0, 0, 132, 1.0)'],
       borderColor: ['rgba(0, 0, 132, 1.0)'],
       borderWidth: 1
@@ -78,7 +82,7 @@ function datasetsFromIntervals(intervals) {
       fill: 'origin',
       pointRadius: 0,
       label: 'Theoretical Cost of Power Over Time',
-      data: intervals.theoretical.costs,
+      data: intervals.theoretical.data,
       backgroundColor: ['rgba(0, 255, 132, 1.0)'],
       borderColor: ['rgba(0, 255, 132, 1.0)'],
       borderWidth: 1

@@ -1,15 +1,22 @@
+import chartTypes from './chart-types';
+
+const CHART_TYPE_TO_DATA_TYPE_MAP = {};
+CHART_TYPE_TO_DATA_TYPE_MAP[chartTypes.COST] = 'cost';
+CHART_TYPE_TO_DATA_TYPE_MAP[chartTypes.POWER_USAGE] = 'value';
+
 export default class DataFormatter {
-  constructor(intervals, multiplier) {
+  constructor(intervals, chartType, multiplier) {
     this.intervals = intervals;
-    this.theoreticalIntervals = theoreticalIntervals(intervals, multiplier);
+    this.chartType = chartType;
     this.multiplier = multiplier;
+    this.theoreticalIntervals = theoreticalIntervals(intervals, multiplier);
   }
 
   get chartFormattedIntervals() {
     return {
       starts: this.intervals.map((interval) => formattedDateTime(interval.start)),
-      actual: formattedIntervals(this.intervals),
-      theoretical: formattedIntervals(this.theoreticalIntervals)
+      actual: formattedIntervals(this.intervals, this.chartType),
+      theoretical: formattedIntervals(this.theoreticalIntervals, this.chartType)
     };
   }
 
@@ -44,11 +51,11 @@ function totalCostOfIntervals(intervals) {
   }, 0);
 }
 
-function formattedIntervals(intervals) {
+function formattedIntervals(intervals, chartType) {
   if (!intervals) return null;
+  const key = CHART_TYPE_TO_DATA_TYPE_MAP[chartType];
   return {
-    values: intervals.map((interval) => interval.value),
-    costs: intervals.map((interval) => interval.cost)
+    data: intervals.map((interval) => interval[key])
   }
 }
 

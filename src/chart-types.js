@@ -1,4 +1,4 @@
 export default {
-  COST: 'cost-view',
-  POWER_USAGE: 'power-usage-view',
+  COST: 'chart-type-cost',
+  POWER_USAGE: 'chart-type-power-usage',
 }
