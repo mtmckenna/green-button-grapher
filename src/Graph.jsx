@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js';
 import Results from './Results';
-import DataFormatter from './data-formatter';
+import ChartData from './chart-data';
 import chartOptions from './chart-options';
 import './Graph.css';
 
@@ -14,7 +14,7 @@ export default class Graph extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const data = new DataFormatter(nextProps.greenButtonJson.intervals, nextProps.multiplier);
+    const data = new ChartData(nextProps.greenButtonJson.intervals, nextProps.multiplier);
     this.setState({
       data: data,
       results: {
