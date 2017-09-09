@@ -1,4 +1,10 @@
 export default {
+  legend: {
+    position: 'bottom'
+  },
+  animation: {
+    duration: 0, // disable animations
+  },
   scales: {
     yAxes: [{
       ticks: {
@@ -8,7 +14,7 @@ export default {
   },
   elements: {
     line: {
-      tension: 0, // disables bezier curves
+      tension: 0, // disabling bezier curves improves performance
     }
   }
 };

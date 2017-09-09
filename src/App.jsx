@@ -4,7 +4,6 @@ import './App.css';
 import ChartButtons from './ChartButtons';
 import Graph from './Graph';
 import Slider from './Slider';
-import Results from './Results';
 import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
@@ -17,8 +16,8 @@ class App extends Component {
     super(props);
     this.state = {
       address: '',
-      results: { total: 0, totalPeak: 0, totalSaved: 0, totalSavedPeak: 0 },
-      data: { starts: [], values: [], costs: [] },
+      greenButtonJson: {},
+      multiplier: 1.0,
       chartType: chartTypes.COST,
       dataViewType: dataViewTypes.AVG_DAY,
       loading: true
@@ -48,24 +47,16 @@ class App extends Component {
   }
 
   handleSliderMoved(event) {
-    //this.parsedData.updateTheoValues(event.currentTarget.value/100);
+    const multiplier = Number(event.currentTarget.value);
+    this.setState({ multiplier: multiplier });
   }
 
   parseGreenButtonXml(xmlString) {
     let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
     this.greenButtonJson = new GreenButtonJson(xml);
     this.setState({
-      address: this.greenButtonJson.address,
-      data: this.greenButtonJson.chartFormattedIntervals
-    });
-
-    this.setState({
-      results: {
-        total: this.greenButtonJson.total,
-        totalPeak: this.greenButtonJson.totalPeak,
-        totalTheoretical: 0,
-        totalPeakTheoretical: 0
-      }
+      greenButtonJson: this.greenButtonJson,
+      address: this.greenButtonJson.address
     });
   }
 
@@ -74,19 +65,21 @@ class App extends Component {
 
     return (
       <div className="App">
-      <div id="address">{this.state.address}</div>
-      <Graph
-      loading={this.state.loading}
-      values={this.state.data.costs}
-      labels={this.state.data.starts}
-      />
-      <Slider handleSliderMoved={this.handleSliderMoved} />
-      <Results {...this.state.results} />
-      <ChartButtons />
-      <FileOpener
-      handleFileSelected={this.handleFileSelected}
-      handleFileLoaded={this.handleFileLoaded}
-      />
+        <div id="address">{this.state.address}</div>
+        <Graph
+          loading={this.state.loading}
+          multiplier={this.state.multiplier}
+          greenButtonJson={this.state.greenButtonJson}
+        />
+        <Slider
+          multiplier={this.state.multiplier}
+          handleSliderMoved={this.handleSliderMoved}
+        />
+        <ChartButtons />
+        <FileOpener
+          handleFileSelected={this.handleFileSelected}
+          handleFileLoaded={this.handleFileLoaded}
+        />
       </div>
     );
   }

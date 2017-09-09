@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import './Slider.css';
 
 export default class Slider extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSliderMoved = this.handleSliderMoved.bind(this);
-  }
-
-  handleSliderMoved(event) {
+  handleSliderMoved = (event) => {
     this.props.handleSliderMoved(event);
   }
 
   render() {
     return (
       <div>
-        <input className="slider" type="range" onChange={this.handleSliderMoved}></input>
+        <input className="slider" type="range"
+          min="0" max="2" step="0.01" value={this.props.multiplier}
+          onChange={this.handleSliderMoved}>
+        </input>
       </div>
     );
   }

@@ -3,19 +3,19 @@ import React, { Component } from 'react';
 export default class Results extends Component {
 
   get total() {
-    return formattedNumber(this.props.total);
+    return formattedDollarAmount(this.props.total);
   }
 
   get totalPeak() {
-    return formattedNumber(this.props.totalPeak);
+    return formattedDollarAmount(this.props.totalPeak);
   }
 
   get totalSaved() {
-    return formattedNumber(this.props.total - this.props.totalTheoretical);
+    return formattedDollarAmount(this.props.total - this.props.totalTheoretical);
   }
 
   get totalSavedPeak() {
-    return formattedNumber(this.props.totalPeak - this.props.totalPeakTheoretical);
+    return formattedDollarAmount(this.props.totalPeak - this.props.totalPeakTheoretical);
   }
 
   render() {
@@ -32,6 +32,10 @@ export default class Results extends Component {
       </div>
     );
   }
+}
+
+function formattedDollarAmount(number) {
+  return '$' + formattedNumber(number);
 }
 
 function formattedNumber(number) {

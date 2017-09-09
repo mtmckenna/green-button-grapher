@@ -1,4 +1,5 @@
 const COST_DIVISOR = 100000;
+
 export default class GreenButtonJson {
   constructor(xml = document.implementation.createDocument(null, 'feed')) {
     this.xml = xml;
@@ -6,9 +7,7 @@ export default class GreenButtonJson {
 
   get address() {
     if (this._address) return this._address;
-
     this._address = this.xml.querySelector('entry > title').innerHTML;
-
     return this._address;
   }
 
@@ -28,45 +27,6 @@ export default class GreenButtonJson {
     return this._intervals;
   }
 
-  get chartFormattedIntervals() {
-    if (this._chartFormattedIntervals) return this._chartFormattedIntervals;
-
-    this._chartFormattedIntervals = {
-      starts: this.intervals.map((interval) => formattedDateTime(interval.start)),
-      values: this.intervals.map((interval) => interval.value),
-      costs: this.intervals.map((interval) => interval.cost)
-    }
-
-    return this._chartFormattedIntervals;
-  }
-
-  get total() {
-    return totalCostOfIntervals(this.intervals);
-  }
-
-  get totalPeak() {
-    return totalCostOfIntervals(peakIntervals(this.intervals));
-  }
-}
-
-function peakIntervals(intervals) {
-  return intervals.filter(function(interval) {
-    return dateIsPeak(interval.start);
-  })
-}
-
-function totalCostOfIntervals(intervals) {
-  return intervals.reduce(function(sum, interval) {
-    return sum + interval.cost;
-  }, 0);
-}
-
-function dateIsPeak(date) {
-  const day = date.getDay();
-  const hour = date.getHours();
-  const weekday = day > 0 && day < 6;
-  const peakHours = hour >= 12 && hour <= 18
-  return weekday && peakHours;
 }
 
 function dateFromStart(startString) {
@@ -74,17 +34,3 @@ function dateFromStart(startString) {
   return new Date(startInMs);
 }
 
-function datePad(number) {
-  let string = number.toString();
-  while (string.length < 2) string = 0 + string;
-  return string;
-}
-
-function formattedDateTime(date) {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
-}
