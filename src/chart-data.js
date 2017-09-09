@@ -75,7 +75,7 @@ function dateIsPeak(date) {
   const day = date.getDay();
   const hour = date.getHours();
   const weekday = day > 0 && day < 6;
-  const peakHours = hour >= 12 && hour <= 18
+  const peakHours = hour >= 12 && hour <= 18;
   return weekday && peakHours;
 }
 

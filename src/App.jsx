@@ -32,9 +32,14 @@ class App extends Component {
     return !!window.File && !!window.FileReader && !!window.FileList && !!window.Blob;
   }
 
-  handleFileLoaded = (xml) => {
-    this.parseGreenButtonXml(xml);
-    this.setState({ loading: false });
+  handleFileLoaded = (xmlString) => {
+    let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
+    let greenButtonJson = new GreenButtonJson(xml);
+
+    this.setState({
+      loading: false,
+      greenButtonJson: greenButtonJson
+    });
   }
 
   handleFileSelected = () => {
@@ -46,15 +51,6 @@ class App extends Component {
     this.setState({ multiplier: multiplier });
   }
 
-  parseGreenButtonXml = (xmlString) => {
-    let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
-    this.greenButtonJson = new GreenButtonJson(xml);
-    this.setState({
-      greenButtonJson: this.greenButtonJson,
-      address: this.greenButtonJson.address
-    });
-  }
-
   changeChartType = (chartType) => {
     this.setState({ chartType: chartType });
   }
@@ -64,7 +60,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div id="address">{this.state.address}</div>
+        <div id="address">{this.state.greenButtonJson.address}</div>
         <Graph
           loading={this.state.loading}
           multiplier={this.state.multiplier}
