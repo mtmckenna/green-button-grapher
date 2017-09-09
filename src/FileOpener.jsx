@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 
 export default class FileOpener extends Component {
-  constructor(props) {
-    super(props);
-    this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handleFileLoaded = this.handleFileLoaded.bind(this);
-  }
-
-  handleFileSelected(event) {
+  handleFileSelected = (event) => {
     let files = event.target.files;
     let reader = new FileReader();
     reader.onloadend = this.handleFileLoaded;
@@ -15,7 +9,7 @@ export default class FileOpener extends Component {
     this.props.handleFileSelected(event);
   }
 
-  handleFileLoaded(event) {
+  handleFileLoaded = (event) => {
     let xmlString = event.target.result;
     this.props.handleFileLoaded(xmlString);
   }

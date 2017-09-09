@@ -22,11 +22,6 @@ class App extends Component {
       dataViewType: dataViewTypes.AVG_DAY,
       loading: true
     };
-    this.handleFileLoaded = this.handleFileLoaded.bind(this);
-    this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handleSliderMoved = this.handleSliderMoved.bind(this);
-    this.parseGreenButtonXml = this.parseGreenButtonXml.bind(this);
-    this.greenButtonJson = new GreenButtonJson();
   }
 
   componentDidMount() {
@@ -37,21 +32,21 @@ class App extends Component {
     return !!window.File && !!window.FileReader && !!window.FileList && !!window.Blob;
   }
 
-  handleFileLoaded(xml) {
+  handleFileLoaded = (xml) => {
     this.parseGreenButtonXml(xml);
     this.setState({ loading: false });
   }
 
-  handleFileSelected() {
+  handleFileSelected = () => {
     this.setState({ loading: true });
   }
 
-  handleSliderMoved(event) {
+  handleSliderMoved = (event) => {
     const multiplier = Number(event.currentTarget.value);
     this.setState({ multiplier: multiplier });
   }
 
-  parseGreenButtonXml(xmlString) {
+  parseGreenButtonXml = function(xmlString) {
     let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
     this.greenButtonJson = new GreenButtonJson(xml);
     this.setState({

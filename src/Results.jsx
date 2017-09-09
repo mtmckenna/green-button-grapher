@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 export default class Results extends Component {
-
   get total() {
     return formattedDollarAmount(this.props.total);
   }
