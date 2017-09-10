@@ -20,17 +20,15 @@ export default class Graph extends Component {
   updateChart() {
     const starts = this.props.chartData.starts;
     const datasets = this.props.chartData.datasets;
-
-    if (this.chart) this.chart.destroy();
     const data = { labels: starts, datasets: datasets };
 
-    const chart = new Chart(this.ctx, {
+    if (this.chart) this.chart.destroy();
+
+    this.chart = new Chart(this.ctx, {
       type: 'line',
       data: data,
       options: chartOptions
     });
-
-    this.chart = chart;
   }
 
   render() {
