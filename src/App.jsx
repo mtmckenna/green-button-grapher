@@ -7,8 +7,8 @@ import Slider from './Slider';
 import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
-import chartTypes from './chart-types';
-import timeCut from './time-cuts';
+import CHART_TYPES from './chart-types';
+import TIME_CUTS from './time-cuts';
 import GreenButtonJson from './green-button-json';
 
 class App extends Component {
@@ -17,8 +17,8 @@ class App extends Component {
     this.state = {
       address: '',
       multiplier: 1.0,
-      chartType: chartTypes.COST,
-      timeCut: timeCut.AVG_DAY,
+      chartType: CHART_TYPES.COST,
+      TIME_CUTS: TIME_CUTS.AVG_DAY,
       loading: true
     };
   }
