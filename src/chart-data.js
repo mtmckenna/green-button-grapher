@@ -1,8 +1,31 @@
 import chartTypes from './chart-types';
+import intervalTypes from './interval-types';
 
-const CHART_TYPE_TO_DATA_TYPE_MAP = {};
-CHART_TYPE_TO_DATA_TYPE_MAP[chartTypes.COST] = 'cost';
-CHART_TYPE_TO_DATA_TYPE_MAP[chartTypes.POWER_USAGE] = 'value';
+const CHART_TYPE_TO_PROPERTY_MAP = {};
+
+CHART_TYPE_TO_PROPERTY_MAP[chartTypes.COST] = {
+  dataType: 'cost',
+  chartTitle: 'Cost of Power Over Time'
+};
+
+CHART_TYPE_TO_PROPERTY_MAP[chartTypes.POWER_USAGE] = {
+  dataType: 'value',
+  chartTitle: 'Power Usage Over Time'
+};
+
+const INTERVAL_TYPE_TO_PROPERTY_MAP = {};
+
+INTERVAL_TYPE_TO_PROPERTY_MAP[intervalTypes.ACTUAL] = {
+  backgroundColor: ['rgba(132, 0, 0, 1.0)'],
+  borderColor: ['rgba(132, 0, 0, 1.0)'],
+  titlePrefix: 'Actual'
+};
+
+INTERVAL_TYPE_TO_PROPERTY_MAP[intervalTypes.THEORETICAL] = {
+  backgroundColor: ['rgba(0, 0, 132, 1.0)'],
+  borderColor: ['rgba(0, 0, 132, 1.0)'],
+  titlePrefix: 'Theoretical'
+};
 
 export default class DataFormatter {
   constructor(intervals, chartType, multiplier) {
@@ -12,12 +35,25 @@ export default class DataFormatter {
     this.theoreticalIntervals = theoreticalIntervals(intervals, multiplier);
   }
 
-  get chartFormattedIntervals() {
-    return {
-      starts: this.intervals.map((interval) => formattedDateTime(interval.start)),
-      actual: formattedIntervals(this.intervals, this.chartType),
-      theoretical: formattedIntervals(this.theoreticalIntervals, this.chartType)
-    };
+  get datasets() {
+    return datasetsFromIntervals(this.formattedIntervals, this.chartType);
+  }
+
+  get formattedIntervals() {
+    return [
+      {
+        type: intervalTypes.THEORETICAL,
+        data: formattedIntervals(this.theoreticalIntervals, this.chartType)
+      },
+      {
+        type: intervalTypes.ACTUAL,
+        data: formattedIntervals(this.intervals, this.chartType)
+      }
+    ];
+  }
+
+  get starts() {
+    return this.intervals.map((interval) => formattedDateTime(interval.start));
   }
 
   get total() {
@@ -53,10 +89,8 @@ function totalCostOfIntervals(intervals) {
 
 function formattedIntervals(intervals, chartType) {
   if (!intervals) return null;
-  const key = CHART_TYPE_TO_DATA_TYPE_MAP[chartType];
-  return {
-    data: intervals.map((interval) => interval[key])
-  }
+  const key = CHART_TYPE_TO_PROPERTY_MAP[chartType].dataType;
+  return intervals.map((interval) => interval[key]);
 }
 
 function theoreticalIntervals(intervals, multiplier) {
@@ -93,3 +127,20 @@ function formattedDateTime(date) {
   const minutes = date.getMinutes();
   return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
 }
+
+function datasetsFromIntervals(intervals, chartType) {
+  return intervals.filter((interval) => !!interval.data)
+    .map(function(interval) {
+      const title = `${INTERVAL_TYPE_TO_PROPERTY_MAP[interval.type].titlePrefix} ${CHART_TYPE_TO_PROPERTY_MAP[chartType].chartTitle}`;
+      return {
+        fill: 'origin',
+        pointRadius: 0,
+        borderWidth: 1,
+        label: title,
+        data: interval.data,
+        backgroundColor: INTERVAL_TYPE_TO_PROPERTY_MAP[interval.type].backgroundColor,
+        borderColor: INTERVAL_TYPE_TO_PROPERTY_MAP[interval.type].borderColor
+      };
+    });
+}
+

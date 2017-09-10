@@ -29,22 +29,20 @@ export default class Graph extends Component {
       }
     });
 
-    this.updateChart(data.chartFormattedIntervals);
+    this.updateChart(data.starts, data.datasets);
   }
 
   get ctx() {
     return this.canvas.getContext('2d');
   }
 
-  updateChart(intervals) {
+  updateChart(starts, datasets) {
     if (this.state.chart) this.state.chart.destroy();
+    const data = { labels: starts, datasets: datasets };
 
     const chart = new Chart(this.ctx, {
       type: 'line',
-      data: {
-        labels: intervals.starts,
-        datasets: datasetsFromIntervals(intervals)
-      },
+      data: data,
       options: chartOptions
     });
 
@@ -64,30 +62,3 @@ export default class Graph extends Component {
   }
 };
 
-function datasetsFromIntervals(intervals) {
-  let datasets = [
-    {
-      fill: 'origin',
-      pointRadius: 0,
-      label: 'Cost of Power Over Time',
-      data: intervals.actual.data,
-      backgroundColor: ['rgba(0, 0, 132, 1.0)'],
-      borderColor: ['rgba(0, 0, 132, 1.0)'],
-      borderWidth: 1
-    }
-  ];
-
-  if (intervals.theoretical) {
-    datasets.splice(0, 0, {
-      fill: 'origin',
-      pointRadius: 0,
-      label: 'Theoretical Cost of Power Over Time',
-      data: intervals.theoretical.data,
-      backgroundColor: ['rgba(0, 255, 132, 1.0)'],
-      borderColor: ['rgba(0, 255, 132, 1.0)'],
-      borderWidth: 1
-    });
-  }
-
-  return datasets;
-}
