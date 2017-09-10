@@ -1,43 +1,28 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js';
 import Results from './Results';
-import ChartData from './chart-data';
 import chartOptions from './chart-options';
 import './Graph.css';
 
 export default class Graph extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      results: { total: 0, totalPeak: 0, totalSaved: 0, totalSavedPeak: 0 }
-    };
+  componentDidMount() {
+    this.updateChart();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const data = new ChartData(
-      nextProps.greenButtonJson.intervals,
-      nextProps.chartType,
-      nextProps.multiplier);
-
-    this.setState({
-      data: data,
-      results: {
-        total: data.total,
-        totalPeak: data.totalPeak,
-        totalTheoretical: data.totalTheoretical,
-        totalPeakTheoretical: data.totalPeakTheoretical
-      }
-    });
-
-    this.updateChart(data.starts, data.datasets);
+  componentDidUpdate() {
+    console.log('cat');
+    this.updateChart();
   }
 
   get ctx() {
     return this.canvas.getContext('2d');
   }
 
-  updateChart(starts, datasets) {
-    if (this.state.chart) this.state.chart.destroy();
+  updateChart() {
+    const starts = this.props.chartData.starts;
+    const datasets = this.props.chartData.datasets;
+
+    if (this.chart) this.chart.destroy();
     const data = { labels: starts, datasets: datasets };
 
     const chart = new Chart(this.ctx, {
@@ -46,7 +31,7 @@ export default class Graph extends Component {
       options: chartOptions
     });
 
-    this.setState({ chart: chart });
+    this.chart = chart;
   }
 
   render() {
@@ -55,8 +40,7 @@ export default class Graph extends Component {
         <canvas id="chart" width="400" height="400"
           ref={canvas => this.canvas = canvas}>
         </canvas>
-        {this.props.loading && <div className="loading-box"><h1>Loading...</h1></div> }
-        <Results {...this.state.results} />
+        <Results {...this.props.chartData.results} />
       </div>
     );
   }

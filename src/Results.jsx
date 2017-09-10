@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CHART_TYPES from './chart-types';
 
 export default class Results extends Component {
   get total() {
@@ -31,6 +32,14 @@ export default class Results extends Component {
       </div>
     );
   }
+}
+
+const CHART_TYPE_TO_FORMATTER_MAP = {};
+CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.COST] = formattedDollarAmount;
+CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.POWER_USAGE] = formattedPowerUsageAmount;
+
+function formattedPowerUsageAmount(number) {
+  return formattedNumber(number) + ' kWh';
 }
 
 function formattedDollarAmount(number) {

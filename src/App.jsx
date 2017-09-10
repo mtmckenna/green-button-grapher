@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './App.css';
 import ChartButtons from './ChartButtons';
-import Graph from './Graph';
+import GraphContainer from './GraphContainer';
 import Slider from './Slider';
 import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
@@ -16,7 +16,6 @@ class App extends Component {
     super(props);
     this.state = {
       address: '',
-      greenButtonJson: {},
       multiplier: 1.0,
       chartType: chartTypes.COST,
       timeCut: timeCut.AVG_DAY,
@@ -33,12 +32,11 @@ class App extends Component {
   }
 
   handleFileLoaded = (xmlString) => {
-    let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
-    let greenButtonJson = new GreenButtonJson(xml);
-
+    let greenButtonJson = greenButtonJsonFromXmlString(xmlString);
     this.setState({
       loading: false,
-      greenButtonJson: greenButtonJson
+      address: greenButtonJson.address,
+      intervals: greenButtonJson.intervals
     });
   }
 
@@ -57,14 +55,14 @@ class App extends Component {
 
   render() {
     if (!this.hasFileApi) return <FileApiWarning />;
+    if (this.state.loading) return <div>Loading...</div>;
 
     return (
       <div className="App">
-        <div id="address">{this.state.greenButtonJson.address}</div>
-        <Graph
-          loading={this.state.loading}
+        <div id="address">{this.state.address}</div>
+        <GraphContainer
+          intervals={this.state.intervals}
           multiplier={this.state.multiplier}
-          greenButtonJson={this.state.greenButtonJson}
           chartType={this.state.chartType}
         />
         <Slider
@@ -81,6 +79,11 @@ class App extends Component {
       </div>
     );
   }
+}
+
+function greenButtonJsonFromXmlString(xmlString) {
+  let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
+  return new GreenButtonJson(xml);
 }
 
 export default App;

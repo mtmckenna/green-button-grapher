@@ -26,7 +26,6 @@ export default class GreenButtonJson {
 
     return this._intervals;
   }
-
 }
 
 function dateFromStart(startString) {

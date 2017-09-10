@@ -34,22 +34,31 @@ export default class DataFormatter {
     return this.intervals.map((interval) => formattedDateTime(interval.start));
   }
 
+  get results() {
+    return {
+      total: this.total,
+      totalPeak: this.totalPeak,
+      totalTheoretical: this.totalTheoretical,
+      totalPeakTheoretical: this.totalPeakTheoretical
+    }
+  }
+
   get total() {
-    return totalCostOfIntervals(this.intervals);
+    return sumOfIntervals(this.intervals, this.chartType);
   }
 
   get totalPeak() {
-    return totalCostOfIntervals(peakIntervals(this.intervals));
+    return sumOfIntervals(peakIntervals(this.intervals), this.chartType);
   }
 
   get totalTheoretical() {
     if (!this.theoreticalIntervals) return 0;
-    return totalCostOfIntervals(this.theoreticalIntervals);
+    return sumOfIntervals(this.theoreticalIntervals, this.chartType);
   }
 
   get totalPeakTheoretical() {
     if (!this.theoreticalIntervals) return 0;
-    return totalCostOfIntervals(peakIntervals(this.theoreticalIntervals));
+    return sumOfIntervals(peakIntervals(this.theoreticalIntervals), this.chartType);
   }
 }
 
@@ -59,9 +68,9 @@ function peakIntervals(intervals) {
   })
 }
 
-function totalCostOfIntervals(intervals) {
+function sumOfIntervals(intervals, chartType) {
   return intervals.reduce(function(sum, interval) {
-    return sum + interval.cost;
+    return sum + interval[CHART_TYPE_TO_PROPERTY_MAP[chartType].dataType];
   }, 0);
 }
 
