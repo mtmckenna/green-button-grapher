@@ -10,7 +10,6 @@ export default class Graph extends Component {
   }
 
   componentDidUpdate() {
-    console.log('cat');
     this.updateChart();
   }
 
