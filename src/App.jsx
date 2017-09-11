@@ -18,7 +18,7 @@ class App extends Component {
       address: '',
       multiplier: 1.0,
       chartType: CHART_TYPES.COST,
-      TIME_CUTS: TIME_CUTS.AVG_DAY,
+      timeCut: TIME_CUTS.AVG_DAY,
       loading: true
     };
   }

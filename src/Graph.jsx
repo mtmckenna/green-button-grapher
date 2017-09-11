@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js';
-import Results from './Results';
 import chartOptions from './chart-options';
 import './Graph.css';
 
@@ -37,7 +36,6 @@ export default class Graph extends Component {
         <canvas id="chart" width="400" height="400"
           ref={canvas => this.canvas = canvas}>
         </canvas>
-        <Results {...this.props.chartData.results} />
       </div>
     );
   }

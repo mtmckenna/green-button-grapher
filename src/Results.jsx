@@ -2,20 +2,23 @@ import React, { Component } from 'react';
 import CHART_TYPES from './chart-types';
 
 export default class Results extends Component {
+  get formatter() {
+    return CHART_TYPE_TO_FORMATTER_MAP[this.props.chartType];
+  }
   get total() {
-    return formattedDollarAmount(this.props.total);
+    return this.formatter(this.props.total);
   }
 
   get totalPeak() {
-    return formattedDollarAmount(this.props.totalPeak);
+    return this.formatter(this.props.totalPeak);
   }
 
   get totalSaved() {
-    return formattedDollarAmount(this.props.total - this.props.totalTheoretical);
+    return this.formatter(this.props.total - this.props.totalTheoretical);
   }
 
   get totalSavedPeak() {
-    return formattedDollarAmount(this.props.totalPeak - this.props.totalPeakTheoretical);
+    return this.formatter(this.props.totalPeak - this.props.totalPeakTheoretical);
   }
 
   render() {
@@ -39,13 +42,13 @@ CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.COST] = formattedDollarAmount;
 CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.POWER_USAGE] = formattedPowerUsageAmount;
 
 function formattedPowerUsageAmount(number) {
-  return formattedNumber(number) + ' kWh';
+  return formattedNumber(number, 0) + ' kWh';
 }
 
 function formattedDollarAmount(number) {
-  return '$' + formattedNumber(number);
+  return '$' + formattedNumber(number, 2);
 }
 
-function formattedNumber(number) {
-  return number.toFixed(2);
+function formattedNumber(number, sigFigs) {
+  return number.toFixed(sigFigs);
 }

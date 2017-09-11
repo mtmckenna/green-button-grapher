@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Graph from './Graph';
+import Results from './Results';
 import ChartData from './chart-data';
 
 export default class GraphContainer extends Component {
@@ -17,7 +18,15 @@ export default class GraphContainer extends Component {
   }
 
   render() {
-    return <Graph chartData={this.state.chartData} />
+    return (
+      <div>
+      <Graph chartData={this.state.chartData} />
+      <Results
+      chartType={this.props.chartType}
+      {...this.state.chartData.results}
+      />
+      </div>
+    );
   }
 }
 
