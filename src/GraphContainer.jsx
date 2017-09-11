@@ -20,11 +20,11 @@ export default class GraphContainer extends Component {
   render() {
     return (
       <div>
-      <Graph chartData={this.state.chartData} />
-      <Results
-      chartType={this.props.chartType}
-      {...this.state.chartData.results}
-      />
+        <Graph chartData={this.state.chartData} />
+        <Results
+          chartType={this.props.chartType}
+          {...this.state.chartData.results}
+        />
       </div>
     );
   }
