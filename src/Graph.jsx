@@ -17,15 +17,11 @@ export default class Graph extends Component {
   }
 
   updateChart() {
-    const starts = this.props.chartData.starts;
-    const datasets = this.props.chartData.datasets;
-    const data = { labels: starts, datasets: datasets };
-
     if (this.chart) this.chart.destroy();
 
     this.chart = new Chart(this.ctx, {
       type: 'line',
-      data: data,
+      data: dataFromProps(this.props),
       options: chartOptions
     });
   }
@@ -41,3 +37,8 @@ export default class Graph extends Component {
   }
 };
 
+function dataFromProps(props) {
+  const starts = props.chartData.starts;
+  const datasets = props.chartData.datasets;
+  return { labels: starts, datasets: datasets };
+}
