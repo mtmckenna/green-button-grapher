@@ -25,8 +25,8 @@ describe('When the app boots', function () {
       })
       .evaluate(() => document.body.textContent);
 
-    expect(initialText).toContain('Total cost: $0.93');
-    expect(initialText).toContain('Cost during peak time: $0.45');
+    expect(initialText).toContain('Total: $0.93');
+    expect(initialText).toContain('Total peak: $0.45');
 
     page.upload("input[type='file']", FULL_SECOND_FILE_PATH);
 

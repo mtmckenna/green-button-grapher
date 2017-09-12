@@ -15,7 +15,7 @@ export default class ChartButtons extends Component {
     return (
       <div>
         <fieldset>
-          <legend>Time scale</legend>
+          <legend>Raw Data</legend>
           <button>
             Most Recent 24 Hours
           </button>

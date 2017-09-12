@@ -5,6 +5,7 @@ export default class Results extends Component {
   get formatter() {
     return CHART_TYPE_TO_FORMATTER_MAP[this.props.chartType];
   }
+
   get total() {
     return this.formatter(this.props.total);
   }
