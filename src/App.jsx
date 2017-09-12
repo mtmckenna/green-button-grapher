@@ -8,12 +8,12 @@ import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
 import GreenButtonJson from './green-button-json';
-import defaultAppState from './default-app-state';
+import INITIAL_APP_STATE from './initial-app-state';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = defaultAppState;
+    this.state = INITIAL_APP_STATE;
   }
 
   componentDidMount() {
