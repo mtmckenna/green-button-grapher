@@ -55,7 +55,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div id="address">{this.state.address}</div>
+        <div>{this.state.address}</div>
         <GraphContainer
           intervals={this.state.intervals}
           multiplier={this.state.multiplier}
