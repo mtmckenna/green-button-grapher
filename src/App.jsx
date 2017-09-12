@@ -37,8 +37,7 @@ class App extends Component {
     this.setState({ loading: true });
   }
 
-  handleSliderMoved = (event) => {
-    const multiplier = Number(event.currentTarget.value);
+  handleSliderMoved = (multiplier) => {
     this.setState({ multiplier: multiplier });
   }
 

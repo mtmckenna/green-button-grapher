@@ -3,7 +3,8 @@ import './Slider.css';
 
 export default class Slider extends Component {
   handleSliderMoved = (event) => {
-    this.props.handleSliderMoved(event);
+    const multiplier = Number(event.currentTarget.value);
+    this.props.handleSliderMoved(multiplier);
   }
 
   render() {
