@@ -16,21 +16,10 @@ export default class ChartData {
   }
 
   get datasets() {
-    return datasetsFromIntervals(this.formattedIntervals, this.chartType);
+    let intervals = formattedComboIntervals(this.intervals, this.theoreticalIntervals, this.chartType);
+    return datasetsFromFormattedComboIntervals(intervals, this.chartType);
   }
 
-  get formattedIntervals() {
-    return [
-      {
-        type: INTERVAL_TYPES.THEORETICAL,
-        data: formattedIntervals(this.theoreticalIntervals, this.chartType)
-      },
-      {
-        type: INTERVAL_TYPES.ACTUAL,
-        data: formattedIntervals(this.intervals, this.chartType)
-      }
-    ];
-  }
 
   get starts() {
     return this.intervals.map((interval) => interval.start);
@@ -38,30 +27,30 @@ export default class ChartData {
 
   get results() {
     return {
-      total: this.total,
-      totalPeak: this.totalPeak,
-      totalTheoretical: this.totalTheoretical,
-      totalPeakTheoretical: this.totalPeakTheoretical
+      total: total(this.intervals, this.chartType),
+      totalPeak: totalPeak(this.intervals, this.chartType),
+      totalTheoretical: totalTheoretical(this.theoreticalIntervals, this.chartType),
+      totalPeakTheoretical: totalPeakTheoretical(this.theoreticalIntervals, this.chartType)
     }
   }
+}
 
-  get total() {
-    return sumOfIntervals(this.intervals, this.chartType);
-  }
+function total(intervals, chartType) {
+  return sumOfIntervals(intervals, chartType);
+}
 
-  get totalPeak() {
-    return sumOfIntervals(peakIntervals(this.intervals), this.chartType);
-  }
+function totalPeak(intervals, chartType) {
+  return sumOfIntervals(peakIntervals(intervals), chartType);
+}
 
-  get totalTheoretical() {
-    if (!this.theoreticalIntervals) return 0;
-    return sumOfIntervals(this.theoreticalIntervals, this.chartType);
-  }
+function totalTheoretical(theoreticalIntervals, chartType) {
+  if (!theoreticalIntervals) return 0;
+  return sumOfIntervals(theoreticalIntervals, chartType);
+}
 
-  get totalPeakTheoretical() {
-    if (!this.theoreticalIntervals) return 0;
-    return sumOfIntervals(peakIntervals(this.theoreticalIntervals), this.chartType);
-  }
+function totalPeakTheoretical(theoreticalIntervals, chartType) {
+  if (!theoreticalIntervals) return 0;
+  return sumOfIntervals(peakIntervals(theoreticalIntervals), chartType);
 }
 
 function timeCutIntervals(intervals, timeCut) {
@@ -106,8 +95,21 @@ function dateIsPeak(date) {
   return weekday && peakHours;
 }
 
-function datasetsFromIntervals(intervals, chartType) {
-  return intervals.filter((interval) => !!interval.data)
+function formattedComboIntervals(intervals, theoreticalIntervals, chartType) {
+  return [
+    {
+      type: INTERVAL_TYPES.THEORETICAL,
+      data: formattedIntervals(theoreticalIntervals, chartType)
+    },
+    {
+      type: INTERVAL_TYPES.ACTUAL,
+      data: formattedIntervals(intervals, chartType)
+    }
+  ];
+}
+
+function datasetsFromFormattedComboIntervals(formattedIntervals, chartType) {
+  return formattedIntervals.filter((interval) => !!interval.data)
     .map(function(interval) {
       const title = `${INTERVAL_TYPE_TO_PROPERTY_MAP[interval.type].titlePrefix} ${CHART_TYPE_TO_PROPERTY_MAP[chartType].chartTitle}`;
       return {
