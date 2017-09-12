@@ -7,20 +7,13 @@ import Slider from './Slider';
 import FileOpener from './FileOpener';
 import FileApiWarning from './FileApiWarning';
 import sampleData from './sample-data';
-import CHART_TYPES from './chart-types';
-import TIME_CUTS from './time-cuts';
 import GreenButtonJson from './green-button-json';
+import defaultAppState from './default-app-state';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      address: '',
-      multiplier: 1.0,
-      chartType: CHART_TYPES.COST,
-      timeCut: TIME_CUTS.AVG_DAY,
-      loading: true
-    };
+    this.state = defaultAppState;
   }
 
   componentDidMount() {
@@ -53,6 +46,10 @@ class App extends Component {
     this.setState({ chartType: chartType });
   }
 
+  changeTimeCut = (timeCut) => {
+    this.setState({ timeCut: timeCut });
+  }
+
   render() {
     if (!this.hasFileApi) return <FileApiWarning />;
     if (this.state.loading) return <div>Loading...</div>;
@@ -64,6 +61,7 @@ class App extends Component {
           intervals={this.state.intervals}
           multiplier={this.state.multiplier}
           chartType={this.state.chartType}
+          timeCut={this.state.timeCut}
         />
         <Slider
           multiplier={this.state.multiplier}
@@ -71,6 +69,7 @@ class App extends Component {
         />
         <ChartButtons
           changeChartType={this.changeChartType}
+          changeTimeCut={this.changeTimeCut}
         />
         <FileOpener
           handleFileSelected={this.handleFileSelected}

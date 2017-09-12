@@ -4,17 +4,15 @@ import Results from './Results';
 import ChartData from './chart-data';
 
 export default class GraphContainer extends Component {
-  get chartData() {
-    return chartDataFromProps(this.props);
-  }
-
   render() {
+    const chartData = chartDataFromProps(this.props);
+
     return (
       <div>
-        <Graph chartData={this.chartData} />
+        <Graph chartData={chartData} />
         <Results
           chartType={this.props.chartType}
-          {...this.chartData.results}
+          {...chartData.results}
         />
       </div>
     );
@@ -22,6 +20,6 @@ export default class GraphContainer extends Component {
 }
 
 function chartDataFromProps(props) {
-  return new ChartData(props.intervals, props.chartType, props.multiplier);
+  return new ChartData(props.intervals, props.chartType, props.timeCut, props.multiplier);
 }
 

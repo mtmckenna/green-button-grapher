@@ -1,3 +1,4 @@
+import TimeCutter from './time-cutter';
 import INTERVAL_TYPES from './interval-types';
 
 import {
@@ -5,12 +6,13 @@ import {
   INTERVAL_TYPE_TO_PROPERTY_MAP
 } from './chart-maps';
 
-export default class DataFormatter {
-  constructor(intervals, chartType, multiplier) {
-    this.intervals = intervals;
+export default class ChartData {
+  constructor(intervals, chartType, timeCut, multiplier) {
+    this.intervals = timeCutIntervals(intervals, timeCut);
+    this.theoreticalIntervals = theoreticalIntervals(this.intervals, multiplier);
     this.chartType = chartType;
+    this.timeCut = timeCut;
     this.multiplier = multiplier;
-    this.theoreticalIntervals = theoreticalIntervals(intervals, multiplier);
   }
 
   get datasets() {
@@ -31,7 +33,7 @@ export default class DataFormatter {
   }
 
   get starts() {
-    return this.intervals.map((interval) => formattedDateTime(interval.start));
+    return this.intervals.map((interval) => interval.start);
   }
 
   get results() {
@@ -62,9 +64,13 @@ export default class DataFormatter {
   }
 }
 
+function timeCutIntervals(intervals, timeCut) {
+  return new TimeCutter(intervals, timeCut).intervals;
+}
+
 function peakIntervals(intervals) {
   return intervals.filter(function(interval) {
-    return dateIsPeak(interval.start);
+    return dateIsPeak(new Date(interval.start));
   })
 }
 
@@ -98,21 +104,6 @@ function dateIsPeak(date) {
   const weekday = day > 0 && day < 6;
   const peakHours = hour >= 12 && hour <= 18;
   return weekday && peakHours;
-}
-
-function datePad(number) {
-  let string = number.toString();
-  while (string.length < 2) string = 0 + string;
-  return string;
-}
-
-function formattedDateTime(date) {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
 }
 
 function datasetsFromIntervals(intervals, chartType) {
