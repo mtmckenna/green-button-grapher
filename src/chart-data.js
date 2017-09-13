@@ -1,10 +1,16 @@
 import TimeCutter from './time-cutter';
 import INTERVAL_TYPES from './interval-types';
+import TIME_CUTS from './time-cuts';
+import { formattedDay, formattedFullDate } from './date-formatters';
 
 import {
   CHART_TYPE_TO_PROPERTY_MAP,
   INTERVAL_TYPE_TO_PROPERTY_MAP
 } from './chart-maps';
+
+const TIME_CUTS_TO_FORMATTER_MAP = {};
+TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_DAY] = formattedDay;
+TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.ALL_TIME] = formattedFullDate;
 
 export default class ChartData {
   constructor(intervals, chartType, timeCut, multiplier) {
@@ -22,7 +28,8 @@ export default class ChartData {
 
 
   get starts() {
-    return this.intervals.map((interval) => interval.start);
+    return this.intervals.map((interval) =>
+      TIME_CUTS_TO_FORMATTER_MAP[this.timeCut](interval.start));
   }
 
   get results() {
@@ -123,4 +130,3 @@ function datasetsFromFormattedComboIntervals(formattedIntervals, chartType) {
       };
     });
 }
-

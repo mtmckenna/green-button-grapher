@@ -4,6 +4,9 @@ const TIME_CUTS_TO_CUTTER_MAP = {};
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_DAY] = avgDayCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.ALL_TIME] = allTimeCutter;
 
+// Make the average day a Monday so it will have peak hours
+const avgDayDate = new Date('2017/9/18');
+
 export default class TimeCutter {
   constructor(intervals, timeCut) {
     this.originalIntervals = intervals;
@@ -17,18 +20,20 @@ export default class TimeCutter {
 
 function avgDayCutter(originalIntervals) {
   return intervalsByHour(originalIntervals).map(function(intervals) {
+    let date = new Date(avgDayDate);
+    date.setHours(intervals[0].start.getHours());
     return {
-      start: formattedDay(intervals[0].start),
+      start: date,
       value: average(intervals.map(interval => interval.value)),
       cost: average(intervals.map(interval => interval.cost))
-    }
+    };
   });
 }
 
 function allTimeCutter(originalIntervals) {
   return originalIntervals.map(function(interval) {
     return {
-      start: formattedFullDate(interval.start),
+      start: interval.start,
       value: interval.value,
       cost: interval.cost
     }
@@ -50,25 +55,5 @@ function average(array) {
 
 function emptyDayArray() {
   return new Array(24).fill(null).map(element => []);
-}
-
-function datePad(number) {
-  let string = number.toString();
-  while (string.length < 2) string = 0 + string;
-  return string;
-}
-
-function formattedDay(date) {
-  const hour = date.getHours();
-  return `${datePad(hour)}:00`;
-}
-
-function formattedFullDate(date) {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
 }
 
