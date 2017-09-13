@@ -58,6 +58,7 @@ function timeCutIntervals(intervals, timeCut) {
 }
 
 function peakIntervals(intervals) {
+  console.log(intervals.length);
   return intervals.filter(function(interval) {
     return dateIsPeak(new Date(interval.start));
   })
@@ -91,7 +92,7 @@ function dateIsPeak(date) {
   const day = date.getDay();
   const hour = date.getHours();
   const weekday = day > 0 && day < 6;
-  const peakHours = hour >= 12 && hour <= 18;
+  const peakHours = hour >= 13 && hour <= 19;
   return weekday && peakHours;
 }
 
