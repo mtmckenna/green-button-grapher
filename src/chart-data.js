@@ -58,7 +58,6 @@ function timeCutIntervals(intervals, timeCut) {
 }
 
 function peakIntervals(intervals) {
-  console.log(intervals.length);
   return intervals.filter(function(interval) {
     return dateIsPeak(new Date(interval.start));
   })
