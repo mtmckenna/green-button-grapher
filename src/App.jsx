@@ -55,7 +55,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div>{this.state.address}</div>
         <GraphContainer
           intervals={this.state.intervals}
           multiplier={this.state.multiplier}
@@ -70,6 +69,7 @@ class App extends Component {
           changeChartType={this.changeChartType}
           changeTimeCut={this.changeTimeCut}
         />
+        <div>{this.state.address}</div>
         <FileOpener
           handleFileSelected={this.handleFileSelected}
           handleFileLoaded={this.handleFileLoaded}

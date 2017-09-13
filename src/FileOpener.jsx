@@ -17,7 +17,6 @@ export default class FileOpener extends Component {
   render() {
     return (
       <div>
-        <h3>Open your GreenButton data:</h3>
         <div>
           <input type="file" onChange={this.handleFileSelected}></input>
         </div>
