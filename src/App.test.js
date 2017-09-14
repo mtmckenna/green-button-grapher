@@ -32,11 +32,12 @@ describe('When the app boots', function () {
 
     let textAfterUpload = await page
       .wait(() => document.body.textContent.includes('Mountain Single-family'))
+      .click("button[data-chart-type='chart-type-power-usage']")
       .evaluate(() => document.body.textContent)
       .end();
 
-    expect(textAfterUpload).toContain('Total power usage: 16195.04kWh');
-    expect(textAfterUpload).toContain('Total usage during peak time: 6023.79kWh');
+    expect(textAfterUpload).toContain('Total: 24380 kWh');
+    expect(textAfterUpload).toContain('Total peak: 5339 kWh');
   });
 });
 

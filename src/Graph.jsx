@@ -18,6 +18,7 @@ export default class Graph extends Component {
 
   updateChart() {
     if (this.chart) this.chart.destroy();
+    if (!this.ctx) return;
 
     this.chart = new Chart(this.ctx, {
       type: 'line',
