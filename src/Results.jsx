@@ -43,13 +43,17 @@ CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.COST] = formattedDollarAmount;
 CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.POWER_USAGE] = formattedPowerUsageAmount;
 
 function formattedPowerUsageAmount(number) {
-  return formattedNumber(number, 0) + ' kWh';
+  return numberAsLocaleString(formattedNumber(number, 0)) + ' kWh';
 }
 
 function formattedDollarAmount(number) {
-  return '$' + formattedNumber(number, 2);
+  return '$' + numberAsLocaleString(formattedNumber(number, 2), { minimumFractionDigits: 2 });
+}
+
+function numberAsLocaleString(number, options) {
+  return Number(number).toLocaleString(undefined, options);
 }
 
 function formattedNumber(number, sigFigs) {
-  return number.toFixed(sigFigs);
+  return Number(number).toFixed(sigFigs);
 }
