@@ -1,8 +1,21 @@
-#legend-peak {
-  width: 50px;
-  height: 25px;
-  margin-right: 5px;
-  background-color: #e88ba1;
-  float: left;
+body {
+  background-color: #ccffcc;
+  font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
 }
 
+.button {
+  background-color: #4CAF50;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 2px;
+  border: none;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.button--active {
+  background-color: #6699ff;
+}

@@ -65,11 +65,11 @@ class App extends Component {
           multiplier={this.state.multiplier}
           handleSliderMoved={this.handleSliderMoved}
         />
+        <div>{this.state.address}</div>
         <ChartButtons
           changeChartType={this.changeChartType}
           changeTimeCut={this.changeTimeCut}
         />
-        <div>{this.state.address}</div>
         <FileOpener
           handleFileSelected={this.handleFileSelected}
           handleFileLoaded={this.handleFileLoaded}
