@@ -51,12 +51,12 @@ function totalPeak(intervals, chartType) {
 }
 
 function totalTheoretical(theoreticalIntervals, chartType) {
-  if (!theoreticalIntervals) return 0;
+  if (!theoreticalIntervals) return null;
   return sumOfIntervals(theoreticalIntervals, chartType);
 }
 
 function totalPeakTheoretical(theoreticalIntervals, chartType) {
-  if (!theoreticalIntervals) return 0;
+  if (!theoreticalIntervals) return null;
   return sumOfIntervals(peakIntervals(theoreticalIntervals), chartType);
 }
 

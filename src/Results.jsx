@@ -15,11 +15,13 @@ export default class Results extends Component {
   }
 
   get totalSaved() {
-    return this.formatter(this.props.total - this.props.totalTheoretical);
+    let saved = this.props.totalTheoretical ? this.props.total - this.props.totalTheoretical : 0;
+    return this.formatter(saved);
   }
 
   get totalSavedPeak() {
-    return this.formatter(this.props.totalPeak - this.props.totalPeakTheoretical);
+    let saved = this.props.totalPeakTheoretical ? this.props.totalPeak - this.props.totalPeakTheoretical : 0;
+    return this.formatter(saved);
   }
 
   render() {
