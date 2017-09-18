@@ -69,6 +69,8 @@ class App extends Component {
         <ChartButtons
           changeChartType={this.changeChartType}
           changeTimeCut={this.changeTimeCut}
+          currentChartType={this.state.chartType}
+          currentTimeCut={this.state.timeCut}
         />
         <FileOpener
           handleFileSelected={this.handleFileSelected}

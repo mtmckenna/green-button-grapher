@@ -1,14 +1,31 @@
 import React, { Component } from 'react';
+import Button from './Button';
 import CHART_TYPES from './chart-types';
 import TIME_CUTS from './time-cuts';
 
 export default class ChartButtons extends Component {
   changeChartType = (event) => {
-    this.props.changeChartType(event.target.dataset.chartType);
+    this.props.changeChartType(event.target.dataset.type);
   }
 
   changeTimeCut = (event) => {
-    this.props.changeTimeCut(event.target.dataset.timeCut);
+    this.props.changeTimeCut(event.target.dataset.type);
+  }
+
+  timeButtonProps(type) {
+    return {
+      type: type,
+      onClick: this.changeTimeCut,
+      currentType: this.props.currentTimeCut
+    };
+  }
+
+  chartTypeProps(type) {
+    return {
+      type: type,
+      onClick: this.changeChartType,
+      currentType: this.props.currentChartType
+    };
   }
 
   render() {
@@ -16,48 +33,44 @@ export default class ChartButtons extends Component {
       <div>
         <fieldset>
           <legend>Raw Data</legend>
-          <button className="button">
+          <Button {...this.timeButtonProps(TIME_CUTS.MOST_RECENT_24_HOURS)}>
             Most Recent 24 Hours
-          </button>
-          <button className="button">Last 7 Days</button>
-          <button className="button">Last 30 Days</button>
-          <button
-            className="button"
-            data-time-cut={TIME_CUTS.ALL_TIME}
-            onClick={this.changeTimeCut}>
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.LAST_7_DAYS)}>
+            Last 7 Days
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.LAST_30_DAYS)}>
+            Last 30 Days
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.ALL_TIME)}>
             All Time
-          </button>
+          </Button>
         </fieldset>
 
         <fieldset>
           <legend>Averages</legend>
-          <button
-            className="button"
-            data-time-cut={TIME_CUTS.AVG_DAY}
-            onClick={this.changeTimeCut}>
+          <Button {...this.timeButtonProps(TIME_CUTS.AVG_DAY)}>
             Day
-          </button>
-          <button className="button">Weekend Day</button>
-          <button className="button">Week Day</button>
-          <button className="button">Peak Time</button>
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.AVG_WEEKEND_DAY)}>
+            Weekend Day
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.AVG_WEEK_DAY)}>
+            Week Day
+          </Button>
+          <Button {...this.timeButtonProps(TIME_CUTS.AVG_PEAK_TIME)}>
+            Peak Time
+          </Button>
         </fieldset>
 
         <fieldset>
           <legend>Chart Type</legend>
-          <div>
-            <button
-              className="button"
-              data-chart-type={CHART_TYPES.COST}
-              onClick={this.changeChartType}>
-              Cost
-            </button>
-            <button
-              className="button"
-              data-chart-type={CHART_TYPES.POWER_USAGE}
-              onClick={this.changeChartType}>
-              Power Usage
-            </button>
-          </div>
+          <Button {...this.chartTypeProps(CHART_TYPES.COST)}>
+            Cost
+          </Button>
+          <Button {...this.chartTypeProps(CHART_TYPES.POWER_USAGE)}>
+            Power Usage
+          </Button>
         </fieldset>
       </div>
     );
