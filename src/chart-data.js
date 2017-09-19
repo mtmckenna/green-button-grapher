@@ -11,6 +11,7 @@ import {
 const TIME_CUTS_TO_FORMATTER_MAP = {};
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_DAY] = formattedDay;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.ALL_TIME] = formattedFullDate;
+TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.MOST_RECENT_24_HOURS] = formattedFullDate;
 
 export default class ChartData {
   constructor(intervals, chartType, timeCut, multiplier) {

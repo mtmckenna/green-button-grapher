@@ -3,6 +3,7 @@ import TIME_CUTS from './time-cuts';
 const TIME_CUTS_TO_CUTTER_MAP = {};
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_DAY] = avgDayCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.ALL_TIME] = allTimeCutter;
+TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.MOST_RECENT_24_HOURS] = mostRecent24HoursCutter;
 
 // Make the average day a Monday so it will have peak hours
 const avgDayDate = new Date('2017/9/18');
@@ -18,6 +19,13 @@ export default class TimeCutter {
   }
 };
 
+function mostRecent24HoursCutter(originalIntervals) {
+  let mostRecentDate = originalIntervals[originalIntervals.length - 1].start;
+  return originalIntervals.filter(function(interval) {
+    return sameDay(mostRecentDate, interval.start);
+  });
+}
+
 function avgDayCutter(originalIntervals) {
   return intervalsByHour(originalIntervals).map(function(intervals) {
     let date = new Date(avgDayDate);
@@ -31,13 +39,7 @@ function avgDayCutter(originalIntervals) {
 }
 
 function allTimeCutter(originalIntervals) {
-  return originalIntervals.map(function(interval) {
-    return {
-      start: interval.start,
-      value: interval.value,
-      cost: interval.cost
-    }
-  });
+  return originalIntervals;
 }
 
 function intervalsByHour(intervals) {
@@ -57,3 +59,8 @@ function emptyDayArray() {
   return new Array(24).fill(null).map(element => []);
 }
 
+function sameDay(date1, date2) {
+  return date1.getDate() === date2.getDate()
+    && date1.getMonth() === date2.getMonth()
+    && date1.getFullYear() === date2.getFullYear();
+}
