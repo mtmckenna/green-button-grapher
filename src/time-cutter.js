@@ -4,6 +4,8 @@ const TIME_CUTS_TO_CUTTER_MAP = {};
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_DAY] = avgDayCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.ALL_TIME] = allTimeCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.MOST_RECENT_24_HOURS] = mostRecent24HoursCutter;
+TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.LAST_7_DAYS] = last7DaysCutter;
+TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.LAST_30_DAYS] = last30DaysCutter;
 
 // Make the average day a Monday so it will have peak hours
 const avgDayDate = new Date('2017/9/18');
@@ -23,6 +25,22 @@ function mostRecent24HoursCutter(originalIntervals) {
   let mostRecentDate = originalIntervals[originalIntervals.length - 1].start;
   return originalIntervals.filter(function(interval) {
     return sameDay(mostRecentDate, interval.start);
+  });
+}
+
+function last7DaysCutter(originalIntervals) {
+  return previousDaysCutter(originalIntervals, 7);
+}
+
+function last30DaysCutter(originalIntervals) {
+  return previousDaysCutter(originalIntervals, 30);
+}
+
+function previousDaysCutter(originalIntervals, numberOfDays) {
+  let date = originalIntervals[originalIntervals.length - 1].start;
+  date.setDate(date.getDate() - numberOfDays);
+  return originalIntervals.filter(function(interval) {
+    return interval.start >= date;
   });
 }
 
