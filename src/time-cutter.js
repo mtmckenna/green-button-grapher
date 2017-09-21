@@ -1,9 +1,11 @@
 import TIME_CUTS from './time-cuts';
+import { peakDate, weekend, sameDay } from './date-checkers';
 
 const TIME_CUTS_TO_CUTTER_MAP = {};
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_DAY] = avgDayCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_WEEKEND_DAY] = avgWeekendDayCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_WEEK_DAY] = avgWeekDayCutter;
+TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.AVG_PEAK_TIME] = avgPeakTimeCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.ALL_TIME] = allTimeCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.MOST_RECENT_24_HOURS] = mostRecent24HoursCutter;
 TIME_CUTS_TO_CUTTER_MAP[TIME_CUTS.LAST_7_DAYS] = last7DaysCutter;
@@ -58,16 +60,24 @@ function avgWeekDayCutter(originalIntervals) {
   })));
 }
 
+function avgPeakTimeCutter(originalIntervals) {
+  return avgDayCutter(originalIntervals.filter(function(interval) {
+    return peakDate(interval.start);
+  }));
+}
+
 function avgDayCutter(originalIntervals) {
-  return intervalsByHour(originalIntervals).map(function(intervals) {
-    let date = new Date(avgDayDate);
-    date.setHours(intervals[0].start.getHours());
-    return {
-      start: date,
-      value: average(intervals.map(interval => interval.value)),
-      cost: average(intervals.map(interval => interval.cost))
-    };
-  });
+  return intervalsByHour(originalIntervals)
+    .filter((intervals) => !!intervals.length)
+    .map(function(intervals) {
+      let date = new Date(avgDayDate);
+      date.setHours(intervals[0].start.getHours());
+      return {
+        start: date,
+        value: average(intervals.map(interval => interval.value)),
+        cost: average(intervals.map(interval => interval.cost))
+      };
+    });
 }
 
 
@@ -92,12 +102,3 @@ function emptyDayArray() {
   return new Array(24).fill(null).map(element => []);
 }
 
-function weekend(date) {
-  return date.getDay() === 6 || date.getDay() === 0;
-}
-
-function sameDay(date1, date2) {
-  return date1.getDate() === date2.getDate()
-    && date1.getMonth() === date2.getMonth()
-    && date1.getFullYear() === date2.getFullYear();
-}

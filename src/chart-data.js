@@ -2,6 +2,7 @@ import TimeCutter from './time-cutter';
 import INTERVAL_TYPES from './interval-types';
 import TIME_CUTS from './time-cuts';
 import { formattedDay, formattedFullDate } from './date-formatters';
+import { peakDate } from './date-checkers';
 
 import {
   CHART_TYPE_TO_PROPERTY_MAP,
@@ -12,6 +13,7 @@ const TIME_CUTS_TO_FORMATTER_MAP = {};
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_DAY] = formattedDay;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_WEEKEND_DAY] = formattedDay;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_WEEK_DAY] = formattedDay;
+TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.AVG_PEAK_TIME] = formattedDay;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.ALL_TIME] = formattedFullDate;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.MOST_RECENT_24_HOURS] = formattedFullDate;
 TIME_CUTS_TO_FORMATTER_MAP[TIME_CUTS.LAST_7_DAYS] = formattedFullDate;
@@ -71,7 +73,7 @@ function timeCutIntervals(intervals, timeCut) {
 
 function peakIntervals(intervals) {
   return intervals.filter(function(interval) {
-    return dateIsPeak(new Date(interval.start));
+    return peakDate(new Date(interval.start));
   })
 }
 
@@ -97,14 +99,6 @@ function theoreticalIntervals(intervals, multiplier) {
       cost: multiplier * interval.cost
     };
   });
-}
-
-function dateIsPeak(date) {
-  const day = date.getDay();
-  const hour = date.getHours();
-  const weekday = day > 0 && day < 6;
-  const peakHours = hour >= 13 && hour <= 19;
-  return weekday && peakHours;
 }
 
 function formattedComboIntervals(intervals, theoreticalIntervals, chartType) {
