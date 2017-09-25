@@ -16,14 +16,14 @@ CHART_TYPE_TO_PROPERTY_MAP[CHART_TYPES.POWER_USAGE] = {
 const INTERVAL_TYPE_TO_PROPERTY_MAP = {};
 
 INTERVAL_TYPE_TO_PROPERTY_MAP[INTERVAL_TYPES.ACTUAL] = {
-  backgroundColor: ['rgb(102,153,255)'],
-  borderColor: ['rgb(102,153,255)'],
+  backgroundColor: 'rgb(102,153,255)',
+  borderColor: 'rgb(102,153,255)',
   titlePrefix: 'Actual'
 };
 
 INTERVAL_TYPE_TO_PROPERTY_MAP[INTERVAL_TYPES.THEORETICAL] = {
-  backgroundColor: ['rgba(0, 0, 132, 1.0)'],
-  borderColor: ['rgba(0, 0, 132, 1.0)'],
+  backgroundColor: 'rgb(0, 0, 132)',
+  borderColor: 'rgb(0, 0, 132)',
   titlePrefix: 'Theoretical'
 };
 
