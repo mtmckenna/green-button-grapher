@@ -25,7 +25,7 @@ describe('When the app boots', function () {
       .evaluate(() => document.body.textContent);
 
     expect(initialText).toContain('Total: $1.30');
-    expect(initialText).toContain('Total peak: $0.45');
+    expect(initialText).toContain('Peak: $0.45');
 
     page.upload("input[type='file']", FULL_SECOND_FILE_PATH);
 
@@ -36,7 +36,7 @@ describe('When the app boots', function () {
       .end();
 
     expect(textAfterUpload).toContain('Total: 24,380 kWh');
-    expect(textAfterUpload).toContain('Total peak: 5,339 kWh');
+    expect(textAfterUpload).toContain('Peak: 5,339 kWh');
   });
 });
 

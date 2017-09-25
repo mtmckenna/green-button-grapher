@@ -8,10 +8,22 @@ export default class Results extends Component {
   }
 
   get total() {
+    let total = this.totalAmount;
+    if (this.props.totalTheoretical) total += ` (${this.totalSaved} saved)`;
+    return total;
+  }
+
+  get peak() {
+    let peak = this.peakAmount;
+    if (this.props.totalPeakTheoretical) peak += ` (${this.peakSaved} saved)`;
+    return peak;
+  }
+
+  get totalAmount() {
     return this.formatter(this.props.total);
   }
 
-  get totalPeak() {
+  get peakAmount() {
     return this.formatter(this.props.totalPeak);
   }
 
@@ -20,7 +32,7 @@ export default class Results extends Component {
     return this.formatter(saved);
   }
 
-  get totalSavedPeak() {
+  get peakSaved() {
     let saved = this.props.totalPeakTheoretical ? this.props.totalPeak - this.props.totalPeakTheoretical : 0;
     return this.formatter(saved);
   }
@@ -28,17 +40,10 @@ export default class Results extends Component {
   render() {
     return (
       <div className="results">
-        <div className="result-set">
-          <div>Total: {this.total}</div>
-          <div>Total peak: {this.totalPeak}</div>
+        <div>
+          <div><strong>Total:</strong> {this.total}</div>
+          <div><strong>Peak:</strong> {this.peak}</div>
         </div>
-
-        {!!this.props.totalTheoretical &&
-          <div className="result-set">
-            <div>Total saved: {this.totalSaved}</div>
-            <div>Total saved peak: {this.totalSavedPeak}</div>
-          </div>
-        }
       </div>
     );
   }
