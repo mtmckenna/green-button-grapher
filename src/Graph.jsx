@@ -29,8 +29,10 @@ export default class Graph extends Component {
 
   render() {
     return (
-      <div className="chart-wrapper">
-        <canvas id="chart" width="400" height="400"
+      <div className="graph-wrapper">
+        <canvas
+          className="graph"
+          width="16" height="9"
           ref={canvas => this.canvas = canvas}>
         </canvas>
       </div>

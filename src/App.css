@@ -1,5 +1,27 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
-  background-color: #ccffcc;
+  box-sizing: border-box;
+  background-color: #c7d6ce;
   font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+  padding: 0 20px 0 20px;
+}
+
+.loading {
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.address {
+  text-align: center;
+  padding: 20px;
+}
+
+.address > h1 {
+  font-size: 20px;
 }
 

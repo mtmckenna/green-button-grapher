@@ -1,20 +1,5 @@
-.chart-wrapper {
+.graph-wrapper {
   position: relative;
-}
-
-.loading-box {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.loading-box h1 {
+  height: 300px;
 }
 

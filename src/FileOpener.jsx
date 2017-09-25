@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './FileOpener.css';
 
 export default class FileOpener extends Component {
   handleFileSelected = (event) => {
@@ -16,10 +17,8 @@ export default class FileOpener extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <input type="file" onChange={this.handleFileSelected}></input>
-        </div>
+      <div className='file-opener'>
+        <input type="file" onChange={this.handleFileSelected}></input>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CHART_TYPES from './chart-types';
+import './Results.css';
 
 export default class Results extends Component {
   get formatter() {
@@ -26,15 +27,18 @@ export default class Results extends Component {
 
   render() {
     return (
-      <div>
-        <div>
+      <div className="results">
+        <div className="result-set">
           <div>Total: {this.total}</div>
           <div>Total peak: {this.totalPeak}</div>
         </div>
-        <div>
-          <div>Total saved: {this.totalSaved}</div>
-          <div>Total saved peak: {this.totalSavedPeak}</div>
-        </div>
+
+        {!!this.props.totalTheoretical &&
+          <div className="result-set">
+            <div>Total saved: {this.totalSaved}</div>
+            <div>Total saved peak: {this.totalSavedPeak}</div>
+          </div>
+        }
       </div>
     );
   }

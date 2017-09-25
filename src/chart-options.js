@@ -1,4 +1,6 @@
 export default {
+  responsive: true,
+  maintainAspectRatio: false,
   legend: {
     position: 'bottom'
   },

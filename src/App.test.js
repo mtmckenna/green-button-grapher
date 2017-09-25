@@ -20,9 +20,8 @@ describe('When the app boots', function () {
     let page = visit('/');
 
     let initialText = await page
-      .wait(() => {
-        return document.body.textContent.includes('123 PRETEND ST BERKELEY CA 94707-2701');
-      })
+      .wait(() => document.body.textContent.includes('123 SAMPLE ST BERKELEY CA 94707-2701'))
+      .click("button[data-type='chart-type-cost']")
       .evaluate(() => document.body.textContent);
 
     expect(initialText).toContain('Total: $1.30');

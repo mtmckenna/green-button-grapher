@@ -16,8 +16,8 @@ CHART_TYPE_TO_PROPERTY_MAP[CHART_TYPES.POWER_USAGE] = {
 const INTERVAL_TYPE_TO_PROPERTY_MAP = {};
 
 INTERVAL_TYPE_TO_PROPERTY_MAP[INTERVAL_TYPES.ACTUAL] = {
-  backgroundColor: ['rgba(132, 0, 0, 1.0)'],
-  borderColor: ['rgba(132, 0, 0, 1.0)'],
+  backgroundColor: ['rgb(102,153,255)'],
+  borderColor: ['rgb(102,153,255)'],
   titlePrefix: 'Actual'
 };
 

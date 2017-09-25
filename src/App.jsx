@@ -51,10 +51,11 @@ class App extends Component {
 
   render() {
     if (!this.hasFileApi) return <FileApiWarning />;
-    if (this.state.loading) return <div>Loading...</div>;
+    if (this.state.loading) return <div className="loading">Loading...</div>;
 
     return (
       <div className="App">
+        <div className="address"><h1>Green Button Data for {this.state.address}</h1></div>
         <GraphContainer
           intervals={this.state.intervals}
           multiplier={this.state.multiplier}
@@ -65,7 +66,6 @@ class App extends Component {
           multiplier={this.state.multiplier}
           handleSliderMoved={this.handleSliderMoved}
         />
-        <div>{this.state.address}</div>
         <ChartButtons
           changeChartType={this.changeChartType}
           changeTimeCut={this.changeTimeCut}
