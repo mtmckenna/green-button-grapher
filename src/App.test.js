@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import nightmare from 'nightmare'
 require('nightmare-upload')(nightmare);
+import { shallow } from 'enzyme';
+import renderer from 'react-test-renderer';
 
 import url from 'url'
 import visit from '../helpers/visit'
@@ -10,6 +12,13 @@ import visit from '../helpers/visit'
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<App />, div);
+});
+
+it('renders correctly', () => {
+  const tree = renderer.create(
+    <App />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
 
 describe('When the app boots', function () {
@@ -40,4 +49,12 @@ describe('When the app boots', function () {
   });
 });
 
-
+describe('When loading a file', function() {
+  test('it shows the loading screen', function() {
+    const wrapper = shallow(<App />);
+    wrapper.setState({ loading: false });
+    expect(wrapper.text()).not.toContain('Loading');
+    wrapper.setState({ loading: true });
+    expect(wrapper.text()).toContain('Loading');
+  });
+});

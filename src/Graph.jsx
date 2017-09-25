@@ -13,6 +13,7 @@ export default class Graph extends Component {
   }
 
   get ctx() {
+    if (!this.canvas) return null;
     return this.canvas.getContext('2d');
   }
 

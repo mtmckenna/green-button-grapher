@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="App"
+>
+  hi
+  <div
+    className="address"
+  >
+    <h1>
+      Green Button Data for 
+      123 SAMPLE ST BERKELEY CA 94707-2701
+    </h1>
+  </div>
+  <div>
+    <div
+      className="graph-wrapper"
+    >
+      <canvas />
+    </div>
+    <div
+      className="results"
+    >
+      <div>
+        <div>
+          <strong>
+            Total:
+          </strong>
+           
+          9,995 kWh
+        </div>
+        <div>
+          <strong>
+            Peak:
+          </strong>
+           
+          3,469 kWh
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <input
+      className="slider"
+      max="2"
+      min="0"
+      onChange={[Function]}
+      step="0.01"
+      type="range"
+      value={1}
+    />
+  </div>
+  <div>
+    <div
+      className="button-set"
+    >
+      <fieldset>
+        <legend>
+          Raw Data
+        </legend>
+        <button
+          className="button "
+          data-type="most-recent-24-hours"
+          onClick={[Function]}
+        >
+          Most Recent 24 Hours
+        </button>
+        <button
+          className="button "
+          data-type="last-7-days"
+          onClick={[Function]}
+        >
+          Last 7 Days
+        </button>
+        <button
+          className="button "
+          data-type="last-30-days"
+          onClick={[Function]}
+        >
+          Last 30 Days
+        </button>
+        <button
+          className="button "
+          data-type="all-time"
+          onClick={[Function]}
+        >
+          All Time
+        </button>
+      </fieldset>
+    </div>
+    <div
+      className="button-set"
+    >
+      <fieldset>
+        <legend>
+          Averages
+        </legend>
+        <button
+          className="button button--active"
+          data-type="avg-day"
+          onClick={[Function]}
+        >
+          Day
+        </button>
+        <button
+          className="button "
+          data-type="avg-weekend-day"
+          onClick={[Function]}
+        >
+          Weekend Day
+        </button>
+        <button
+          className="button "
+          data-type="avg-week-day"
+          onClick={[Function]}
+        >
+          Week Day
+        </button>
+        <button
+          className="button "
+          data-type="avg-peak-time"
+          onClick={[Function]}
+        >
+          Peak Time
+        </button>
+      </fieldset>
+    </div>
+    <div
+      className="button-set"
+    >
+      <fieldset>
+        <legend>
+          Chart Type
+        </legend>
+        <button
+          className="button "
+          data-type="chart-type-cost"
+          onClick={[Function]}
+        >
+          Cost
+        </button>
+        <button
+          className="button button--active"
+          data-type="chart-type-power-usage"
+          onClick={[Function]}
+        >
+          Power Usage
+        </button>
+      </fieldset>
+    </div>
+  </div>
+  <div
+    className="file-opener"
+  >
+    <input
+      onChange={[Function]}
+      type="file"
+    />
+  </div>
+</div>
+`;
