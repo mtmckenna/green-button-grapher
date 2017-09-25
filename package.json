@@ -1,5 +1,6 @@
 {
   "name": "green-button-grapher",
+  "homepage": "https://mtmckenna.github.com/green-button-grapher/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
