@@ -2,14 +2,11 @@
 
 ## What is This Thing
 
-- Green Button data
-- Visualizer
-- create-react-app
+The Green Button Grapher parses and charts [Green Button Data](http://www.greenbuttondata.org/).
 
 ## How to Use It
 
-- Use the hosted version at...
-- Open `dist/index.html` in a web browser.
+Use the [hosted version on GitHub](https://www.mtmckenna.com/green-button-grapher/)
 
 ## How to Build It
 
@@ -21,7 +18,7 @@
 
 `yarn test`
 
-### Building for Destribution
+### Building for Distribution
 
 `yarn build`
 
