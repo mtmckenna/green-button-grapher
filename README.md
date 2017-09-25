@@ -2,11 +2,13 @@
 
 ## What is This Thing
 
-The Green Button Grapher parses and charts [Green Button Data](http://www.greenbuttondata.org/).
+Green Button Grapher parses and charts [Green Button Data](http://www.greenbuttondata.org/).
 
 ## How to Use It
 
-Use the [hosted version on GitHub](https://www.mtmckenna.com/green-button-grapher/)
+First, download your Green Button Data from your power utility company's website. For example, [here are instructions for downloading Green Button Data from PG&E](https://energy.gov/sites/prod/files/Using%20Green%20Button%20Download.pdf).
+
+Next, visit the [hosted version of Green Button Grapher on GitHub](https://www.mtmckenna.com/green-button-grapher/) and upload your Green Button file. Your data will then be displayed as a chart. Note that the file is only parsed by your web browser and not sent to a server.
 
 ## How to Build It
 

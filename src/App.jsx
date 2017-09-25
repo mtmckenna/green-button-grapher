@@ -76,6 +76,9 @@ class App extends Component {
           handleFileSelected={this.handleFileSelected}
           handleFileLoaded={this.handleFileLoaded}
         />
+        <div className="source-code">
+          <a href="https://github.com/mtmckenna/green-button-grapher">Green Button Grapher source code</a>
+        </div>
       </div>
     );
   }
