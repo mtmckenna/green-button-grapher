@@ -5,8 +5,11 @@ function datePad(number) {
 }
 
 function formattedDay(date) {
-  const hour = date.getHours();
-  return `${datePad(hour)}:00`;
+  let hour = date.getHours();
+  let amPm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  hour = hour === 0 ? 12 : hour;
+  return `${datePad(hour)}:00 ${amPm}`;
 }
 
 function formattedFullDate(date) {
@@ -15,7 +18,7 @@ function formattedFullDate(date) {
   const year = date.getFullYear();
   const hour = date.getHours();
   const minutes = date.getMinutes();
-  return `${year}/${datePad(month)}/${datePad(day)} ${datePad(hour)}:${datePad(minutes)}`;
+  return `${year}/${datePad(month)}/${datePad(day)}`;
 }
 
 export { formattedDay, formattedFullDate }
