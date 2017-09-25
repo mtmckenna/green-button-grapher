@@ -80,7 +80,6 @@ function avgDayCutter(originalIntervals) {
     });
 }
 
-
 function allTimeCutter(originalIntervals) {
   return originalIntervals;
 }
