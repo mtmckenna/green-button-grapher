@@ -4,7 +4,6 @@ cache:
     - node_modules
 script:
   - npm run build
-  - npm run start &
   - npm test
 addons:
   apt:
