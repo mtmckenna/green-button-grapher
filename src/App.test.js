@@ -22,11 +22,15 @@ it('renders correctly', () => {
 });
 
 describe('When the app boots', function () {
+  let server;
+  beforeEach(function() { server = runStaticServer(); });
+  afterEach(function() { server.close(); });
+
   test('it displays test data and can parse a new file', async function () {
     const SECOND_FILE_PATH = '/public/data/Mountain_Single_family_Jan_1_2011_to_Jan_1_2012.xml';
     const FULL_SECOND_FILE_PATH = `${process.cwd()}${SECOND_FILE_PATH}`;
 
-    let page = visit('/');
+    let page = visit('/index.html');
 
     let initialText = await page
       .wait(() => document.body.textContent.includes('123 SAMPLE ST BERKELEY CA 94707-2701'))
@@ -58,3 +62,10 @@ describe('When loading a file', function() {
     expect(wrapper.text()).toContain('Loading');
   });
 });
+
+function runStaticServer() {
+  let express = require('express');
+  let app = express();
+  app.use(express.static('build'));
+  return app.listen(3001);
+}

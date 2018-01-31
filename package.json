@@ -1,6 +1,6 @@
 {
   "name": "green-button-grapher",
-  "homepage": "https://mtmckenna.github.com/green-button-grapher/",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -23,6 +23,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "express": "^4.16.2",
     "flow-bin": "^0.54.0",
     "nightmare": "^2.10.0",
     "nightmare-upload": "^0.1.1"
