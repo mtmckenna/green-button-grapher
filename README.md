@@ -1,4 +1,4 @@
-# Green Button Grapher
+# Green Button Grapher [![Build Status](https://travis-ci.org/mtmckenna/green-button-grapher.svg?branch=master)](https://travis-ci.org/mtmckenna/green-button-grapher)
 
 ## What is This Thing
 
