@@ -6,7 +6,7 @@
   "dependencies": {
     "bugsnag-js": "^4.2.0",
     "bugsnag-react": "^1.0.0",
-    "chart.js": "^2.7.1",
+    "chart.js": "^2.9.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "gh-pages": "^1.0.0",
