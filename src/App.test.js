@@ -48,8 +48,8 @@ describe('When the app boots', function () {
       .evaluate(() => document.body.textContent)
       .end();
 
-    expect(textAfterUpload).toContain('Total: 24,380 kWh');
-    expect(textAfterUpload).toContain('Peak: 5,339 kWh');
+    expect(textAfterUpload).toContain('Total: 24,380 Wh');
+    expect(textAfterUpload).toContain('Peak: 5,339 Wh');
   });
 });
 

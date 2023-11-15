@@ -40,7 +40,7 @@
         <id>urn:uuid:2557def0-8321-11e0-9d78-0800200c9a66</id>
         <link rel="self" href="/ReadingType/07"/>
         <link rel="up" type="" href="/User/9b6c7063/UsagePoint/01/MeterReading/01"/>
-        <title>Energy Delivered (kWh)</title>
+        <title>Energy Delivered (Wh)</title>
         <content>
             <ReadingType xmlns="http://naesb.org/espi">
                 <accumulationBehaviour>4</accumulationBehaviour>

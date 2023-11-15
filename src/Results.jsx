@@ -54,7 +54,7 @@ CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.COST] = formattedDollarAmount;
 CHART_TYPE_TO_FORMATTER_MAP[CHART_TYPES.POWER_USAGE] = formattedPowerUsageAmount;
 
 function formattedPowerUsageAmount(number) {
-  return numberAsLocaleString(formattedNumber(number, 0)) + ' kWh';
+  return numberAsLocaleString(formattedNumber(number, 0)) + ' Wh';
 }
 
 function formattedDollarAmount(number) {

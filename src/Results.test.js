@@ -12,16 +12,16 @@ describe('When there are power savings to show', function() {
       chartType={CHART_TYPES.POWER_USAGE}
       />);
 
-    expect(wrapper.text()).toContain('Total: 10 kWh');
-    expect(wrapper.text()).toContain('Peak: 5 kWh');
+    expect(wrapper.text()).toContain('Total: 10 Wh');
+    expect(wrapper.text()).toContain('Peak: 5 Wh');
 
     wrapper.setProps({
       totalTheoretical: 8,
       totalPeakTheoretical: 1,
     });
 
-    expect(wrapper.text()).toContain('Total: 10 kWh (2 kWh saved)');
-    expect(wrapper.text()).toContain('Peak: 5 kWh (4 kWh saved)');
+    expect(wrapper.text()).toContain('Total: 10 Wh (2 Wh saved)');
+    expect(wrapper.text()).toContain('Peak: 5 Wh (4 Wh saved)');
   });
 });
 
